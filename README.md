@@ -6,7 +6,7 @@
 This project is a **PDF Extractor Application** that allows users to extract text from PDF documents. It uses *Spring Boot* to create a web service that accepts **Base64-encoded PDF data** and returns the extracted text **page by page**. The application leverages the **PDFBox library** for PDF processing and can be easily deployed using **Docker**. It's designed to be a simple yet powerful tool for developers who need to integrate PDF text extraction into their applications.
 
 
-**Source Repository:** [dygavieta/pdf-extractor](dygavieta/pdf-extractor)
+**Source Repository:** [https://github.com/dygavieta/pdf-extractor](https://github.com/dygavieta/pdf-extractor)
 
 ```mermaid
 flowchart TD
