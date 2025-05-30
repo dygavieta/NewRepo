@@ -65,91 +65,95 @@ flowchart TD
 
 # Chapter 1: Documentation Flow
 
-Welcome to the exciting world of `github-agent`! In this chapter, we'll explore the heart of our project: the Documentation Flow. Think of it as the master chef in a bustling kitchen, orchestrating the creation of a delicious documentation feast.
+Welcome to the exciting world of `github-agent`! In this chapter, we'll explore the heart of our project: the Documentation Flow. Imagine you're building a complex Lego set without instructions. Wouldn't it be great if there was a magical system that could look at all your Lego pieces and create a step-by-step guide for you? That's exactly what our Documentation Flow does, but for code!
 
-## What Problem Does Documentation Flow Solve?
+## What is the Documentation Flow?
 
-Imagine you're tasked with explaining a complex codebase to a newcomer. Where do you start? How do you organize the information? This is where Documentation Flow comes to the rescue! It automates the process of turning a jumble of code files into a clear, well-structured tutorial.
+The Documentation Flow is like a master chef in a kitchen, orchestrating the creation of a delicious meal (in our case, comprehensive documentation) from raw ingredients (your code). It defines a series of steps that transform your codebase into a beautifully structured tutorial.
 
-Let's say we have a simple weather app project. Our Documentation Flow will help us create a tutorial that explains how the app works, from fetching weather data to displaying it on the screen.
+Let's break it down with a simple analogy:
 
-## Key Concepts
+1. Gather ingredients (Fetch the code)
+2. Identify key flavors (Find important concepts in the code)
+3. Understand how flavors work together (Analyze relationships between concepts)
+4. Plan the menu (Order the chapters)
+5. Cook the dishes (Write the chapters)
+6. Plate the meal (Combine the documentation)
+7. Add final touches (Integrate with project management tools like Jira)
+8. Serve the meal (Upload the finished documentation)
 
-1. **Flow**: A sequence of steps that work together to achieve a goal.
-2. **Nodes**: Individual tasks in our flow, like "analyze code" or "write chapter".
-3. **Connections**: The order in which nodes are executed.
+## How Does It Work?
 
-## Using Documentation Flow
-
-To use the Documentation Flow, we start by creating it:
-
-```python
-from flow import create_documentation_flow
-
-documentation_flow = create_documentation_flow()
-```
-
-This sets up our flow with all the necessary steps. Now, let's run it:
+The Documentation Flow uses a system of connected nodes, where each node represents a specific task in the documentation process. Let's look at a simplified version of how we create this flow:
 
 ```python
-shared = {
-    "repo_url": "https://github.com/weather-app/cool-forecasts",
-    "output_dir": "./tutorial_output"
-}
-documentation_flow.run(shared)
-```
+from pocketflow import Flow
+from nodes import FetchRepo, IdentifyAbstractions, WriteChapters
 
-This will start the documentation process for our weather app. The `shared` dictionary contains important information that our flow will use and update as it progresses.
-
-## Under the Hood
-
-When we run our Documentation Flow, here's what happens behind the scenes:
-
-```mermaid
-sequenceDiagram
-    participant MF as Main Flow
-    participant FR as Fetch Repo
-    participant IA as Identify Abstractions
-    participant WC as Write Chapters
-    participant CD as Combine Documentation
-
-    MF->>FR: Fetch code
-    FR->>IA: Analyze code
-    IA->>WC: Generate chapters
-    WC->>CD: Combine into tutorial
-    CD->>MF: Return final document
-```
-
-Let's break this down:
-
-1. We fetch the code from the repository.
-2. The code is analyzed to identify key concepts and structures.
-3. Individual chapters are written based on these concepts.
-4. Finally, all chapters are combined into a cohesive tutorial.
-
-## Implementation Details
-
-The Documentation Flow is created in the `flow.py` file. Here's a simplified version of how it's set up:
-
-```python
 def create_documentation_flow():
     fetch_repo = FetchRepo()
     identify_abstractions = IdentifyAbstractions()
     write_chapters = WriteChapters()
-    combine_documentation = CombineDocumentation()
 
-    fetch_repo >> identify_abstractions >> write_chapters >> combine_documentation
+    fetch_repo >> identify_abstractions >> write_chapters
 
     return Flow(start=fetch_repo)
 ```
 
-Each line creates a node, and the `>>` operator connects them in sequence. This tells our flow the order in which to execute these tasks.
+This code creates a simple flow where we fetch the repository, identify important abstractions, and then write chapters. The `>>` operator connects the nodes in sequence.
+
+## Under the Hood
+
+When you run the Documentation Flow, here's what happens behind the scenes:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant DF as Documentation Flow
+    participant GH as GitHub
+    participant LLM as Language Model
+
+    User->>DF: Start documentation process
+    DF->>GH: Fetch repository
+    GH-->>DF: Return code files
+    DF->>LLM: Analyze code
+    LLM-->>DF: Return abstractions and relationships
+    DF->>LLM: Generate chapter content
+    LLM-->>DF: Return chapter text
+    DF->>User: Deliver final documentation
+```
+
+1. The flow starts when a user initiates the process.
+2. It fetches the code from GitHub or a local directory.
+3. The code is analyzed to identify key concepts and their relationships.
+4. Based on this analysis, it plans and writes the chapters.
+5. Finally, it combines everything into a cohesive document and delivers it to the user.
+
+## Customizing the Flow
+
+You can customize the Documentation Flow to fit your needs. For example, you might want to add extra steps for specific project requirements:
+
+```python
+from nodes import JiraIntegration, UploadToGitHub
+
+def create_custom_flow():
+    # ... (previous nodes)
+    jira_integration = JiraIntegration()
+    upload_to_github = UploadToGitHub()
+
+    # ... (connect previous nodes)
+    write_chapters >> jira_integration >> upload_to_github
+
+    return Flow(start=fetch_repo)
+```
+
+This customized flow adds steps to integrate with Jira for project management and upload the final documentation to GitHub.
 
 ## Conclusion
 
-The Documentation Flow is the backbone of `github-agent`, turning code into clear, readable tutorials. It breaks down the complex task of documentation into manageable steps, ensuring nothing is missed.
+The Documentation Flow is the backbone of `github-agent`, orchestrating the entire process of turning your code into comprehensive, beginner-friendly documentation. It's flexible, powerful, and designed to make your life easier.
 
-In the next chapter, we'll dive into the [Server Interface](02_server_interface_.md), which helps our Documentation Flow communicate with the outside world. Get ready to explore how we send and receive information to make our documentation process even smoother!
+In the next chapter, we'll dive into the [Server Interface](02_server_interface_.md), which allows our Documentation Flow to communicate with external services and APIs. Get ready to explore how we connect our magical documentation kitchen to the outside world!
 
 
 
@@ -158,70 +162,61 @@ In the next chapter, we'll dive into the [Server Interface](02_server_interface_
 
 # Chapter 2: Server Interface
 
-Welcome back, aspiring documentation wizards! In our [previous chapter](01_documentation_flow_.md), we explored how the Documentation Flow works its magic to transform code into beautiful tutorials. Now, let's dive into the Server Interface, which acts as the friendly receptionist for our documentation factory.
+Welcome back, documentation explorers! In our [previous chapter](01_documentation_flow_.md), we learned about the magical Documentation Flow that transforms code into beautiful tutorials. Now, let's dive into the Server Interface, our friendly receptionist for the documentation factory!
 
-## What's the Server Interface All About?
+## What's the Server Interface?
 
-Imagine you're running a bustling restaurant. You need someone at the front desk to take orders, answer phone calls, and ensure everything runs smoothly. That's exactly what the Server Interface does for our `github-agent` project!
+Imagine you have a lemonade stand. You're great at making lemonade, but you can't be there all the time. What if you could build a robot that could take orders and serve lemonade even when you're not around? That's basically what the Server Interface does for our documentation system!
 
-Let's say you want to create documentation for your awesome new weather app, but you're working on a different computer or even collaborating with a team. How do you access the documentation generator? Enter the Server Interface!
+The Server Interface is like a 24/7 receptionist for our documentation factory. It allows other programs or people to request documentation without needing to understand all the complex machinery inside. Let's see how it works!
 
-## Key Concepts
+## How to Use the Server Interface
 
-1. **Server**: A computer program that provides services to other programs or devices.
-2. **Interface**: A point where two systems meet and interact.
-3. **Network**: A group of connected computers that can communicate with each other.
-
-## Using the Server Interface
-
-To use the Server Interface, we first need to start it up. It's like opening our restaurant for business:
+Let's say you want to generate documentation for a GitHub project. Here's how you might do it:
 
 ```python
-from server import mcp
+import requests
 
-if __name__ == "__main__":
-    mcp.run()
+url = "http://our-doc-service.com/generate"
+data = {
+    "repo_url": "https://github.com/coolproject/awesome-code",
+    "upload": "github"
+}
+
+response = requests.post(url, json=data)
+result = response.json()
 ```
 
-This code snippet starts our server, making it ready to accept requests.
-
-Now, let's say we want to generate documentation for our weather app. We can send a request to our server like this:
-
-```python
-result = generate_document(
-    repo_url="https://github.com/weather-app/cool-forecasts",
-    upload="github"
-)
-```
-
-This tells our server to generate documentation for the specified GitHub repository and upload the result to GitHub.
+This code sends a request to our documentation service. It's like leaving a note for our robot receptionist saying, "Please make documentation for this GitHub project and upload it back to GitHub when you're done."
 
 ## Under the Hood
 
-When we use the Server Interface, here's what happens behind the scenes:
+When you make a request, here's what happens behind the scenes:
 
 ```mermaid
 sequenceDiagram
-    participant C as Client
+    participant User as You
     participant SI as Server Interface
     participant DF as Documentation Flow
     participant GH as GitHub
 
-    C->>SI: Send request
-    SI->>DF: Generate documentation
-    DF->>SI: Return result
-    SI->>GH: Upload documentation
-    SI->>C: Send response
+    User->>SI: Request documentation
+    SI->>DF: Start documentation process
+    DF->>GH: Fetch repository
+    GH-->>DF: Return code
+    DF->>DF: Generate documentation
+    DF-->>SI: Return results
+    SI-->>User: Send response
 ```
 
-1. A client (like your computer) sends a request to the Server Interface.
-2. The Server Interface calls the [Documentation Flow](01_documentation_flow_.md) to generate the documentation.
-3. Once the documentation is ready, it's uploaded to GitHub (or another specified location).
-4. Finally, the Server Interface sends a response back to the client with the results.
+1. You send a request to the Server Interface.
+2. The Server Interface tells the [Documentation Flow](01_documentation_flow_.md) to start working.
+3. The Documentation Flow does its magic (as we learned in the previous chapter).
+4. When it's done, the Server Interface sends the results back to you.
 
-## Implementation Details
+## The Code Behind the Magic
 
-The Server Interface is implemented in the `server.py` file. Let's look at a simplified version:
+Let's peek at how our Server Interface is set up:
 
 ```python
 from fastmcp import FastMCP
@@ -230,33 +225,31 @@ from flow import create_documentation_flow
 mcp = FastMCP("Document Generator")
 
 @mcp.tool()
-def generate_document(repo_url: str, upload: str) -> dict:
-    # Set up shared data
-    shared = {
-        "repo_url": repo_url,
-        "upload": upload,
-        # ... other settings ...
-    }
-    
-    # Create and run the documentation flow
-    tutorial_flow = create_documentation_flow()
-    tutorial_flow.run(shared)
-    
-    # Return the results
-    return {
-        "status": "success",
-        "output_dir": shared["final_output_dir"],
-        # ... other results ...
-    }
+def generate_document(repo_url: str = None, upload: str = "github") -> dict:
+    # Magic happens here!
+    # ...
 ```
 
-This code defines a `generate_document` function that our server can call when it receives a request. It sets up the necessary data, runs the documentation flow, and returns the results.
+This code creates our Server Interface using something called FastMCP. The `generate_document` function is like a special button that starts the documentation process when pressed.
+
+## Customizing the Server
+
+You can customize how the Server Interface works. For example, you might want to add security:
+
+```python
+@mcp.tool(require_api_key=True)
+def generate_document(repo_url: str, api_key: str):
+    # Check if api_key is valid
+    # Then generate document
+```
+
+This adds a special "key" that users need to provide to use the service, like a secret password for your lemonade-making robot.
 
 ## Conclusion
 
-The Server Interface is like a friendly robot assistant that helps you generate documentation from anywhere, anytime. It takes your requests, works with the Documentation Flow to create beautiful tutorials, and sends the results back to you or uploads them directly.
+The Server Interface is our friendly robot receptionist, making it easy for anyone to request documentation without needing to understand all the complex parts inside. It connects our [Documentation Flow](01_documentation_flow_.md) to the outside world, allowing our system to be used as a service.
 
-In our next chapter, we'll explore [Configuration Management](03_configuration_management_.md), which helps us customize how our documentation is generated. Get ready to fine-tune your documentation factory!
+In the next chapter, we'll explore [Configuration Management](03_configuration_management_.md), where we'll learn how to customize our documentation robot to make different flavors of lemonade... I mean, documentation! Get ready to tweak and tune our system to perfection!
 
 
 
@@ -265,95 +258,110 @@ In our next chapter, we'll explore [Configuration Management](03_configuration_m
 
 # Chapter 3: Configuration Management
 
-Welcome back, documentation adventurers! In our [previous chapter](02_server_interface_.md), we explored how the Server Interface acts as a friendly receptionist for our documentation factory. Now, let's dive into the exciting world of Configuration Management!
+Welcome back, documentation adventurers! In our [previous chapter](02_server_interface_.md), we explored the Server Interface, our friendly receptionist for the documentation factory. Now, let's dive into the exciting world of Configuration Management – the control panel of our documentation machine!
 
-Imagine you're setting up a new smartphone. You get to choose your wallpaper, ringtone, and app layout. That's exactly what Configuration Management does for our `github-agent` project!
+## What is Configuration Management?
 
-## What Problem Does Configuration Management Solve?
+Imagine you're building a customizable robot. You want to be able to change its color, adjust its height, and even give it different abilities. Configuration Management is like the control panel that lets you make all these adjustments easily.
 
-Let's say you're creating documentation for different projects: a weather app, a recipe book, and a fitness tracker. Each project might need different settings. For example, the weather app might need to include JavaScript files, while the recipe book focuses on Markdown files. Configuration Management helps us customize these settings easily!
+In our `github-agent` project, Configuration Management helps us customize how our documentation is generated. It's like having a magic wand that can change how our documentation looks and behaves!
 
-## Key Concepts
+## Why Do We Need Configuration Management?
 
-1. **Configuration**: A set of settings that control how our documentation is generated.
-2. **Input Sources**: Where we get our code from (like GitHub repositories or local folders).
-3. **Output Formats**: How we want our final documentation to look (e.g., Markdown files, PDF, or HTML).
-4. **Processing Options**: Special instructions for handling our code (like ignoring certain files or focusing on specific parts).
+Let's say you want to create documentation for different projects:
 
-## Using Configuration Management
+1. A Python project with lots of code comments
+2. A JavaScript project with very few comments
+3. A Go project that needs extra explanations for beginners
 
-To use Configuration Management, we start by setting up our configuration:
+With Configuration Management, you can easily adjust our documentation generator to handle all these different scenarios without changing the core code. It's like having a Swiss Army knife for documentation!
+
+## How to Use Configuration Management
+
+Let's look at a simple example of how we might use Configuration Management:
 
 ```python
 config = {
-    "repo_url": "https://github.com/weather-app/cool-forecasts",
-    "output_dir": "./docs",
-    "include_patterns": ["*.js", "*.md"],
-    "exclude_patterns": ["tests/*"],
-    "language": "english"
+    "input_source": "github",
+    "repo_url": "https://github.com/coolproject/awesome-code",
+    "output_format": "markdown",
+    "language": "english",
+    "max_file_size": 100000
 }
-```
-
-This configuration tells our system to document a weather app from GitHub, save the output in a "docs" folder, include JavaScript and Markdown files, exclude test files, and generate the documentation in English.
-
-Now, let's use this configuration:
-
-```python
-from documentation_generator import generate_docs
 
 generate_docs(config)
 ```
 
-This will start the documentation process using our custom settings!
+In this code, we're creating a `config` dictionary that tells our documentation generator:
+- Where to get the code from (GitHub)
+- Which repository to use
+- What format to use for the output (Markdown)
+- What language to write the documentation in
+- How big the files can be
+
+Then we pass this configuration to our `generate_docs` function. It's like giving instructions to our documentation robot!
 
 ## Under the Hood
 
-When we use Configuration Management, here's what happens behind the scenes:
+When you use Configuration Management, here's what happens behind the scenes:
 
 ```mermaid
 sequenceDiagram
+    participant User
     participant CM as Config Manager
-    participant FR as Fetch Repo
     participant DF as Doc Flow
-    participant OG as Output Generator
+    participant LLM as Language Model
 
-    CM->>FR: Provide input source
-    FR->>DF: Send filtered files
-    DF->>OG: Apply processing options
-    OG->>CM: Return final document
+    User->>CM: Set configuration
+    CM->>DF: Apply settings
+    DF->>LLM: Adjust parameters
+    LLM->>DF: Generate content
+    DF->>User: Return documentation
 ```
 
-1. The Configuration Manager reads our settings.
-2. It tells the [Code Crawler](06_code_crawler_.md) where to find our code.
-3. The [Documentation Flow](01_documentation_flow_.md) uses our processing options.
-4. Finally, the output is generated according to our chosen format.
+1. You set the configuration.
+2. The Configuration Manager applies these settings to the [Documentation Flow](01_documentation_flow_.md).
+3. The Documentation Flow adjusts how it works based on these settings.
+4. The [LLM Integration](05_llm_integration_.md) uses these settings to generate appropriate content.
+5. You get back documentation tailored to your needs!
 
-## Implementation Details
+## The Code Behind the Magic
 
-The Configuration Management is implemented in the `config.py` file. Here's a simplified version:
+Let's peek at how our Configuration Management might be set up:
 
 ```python
 class ConfigManager:
-    def __init__(self, config):
-        self.config = config
+    def __init__(self):
+        self.config = {}
 
-    def get_input_source(self):
-        return self.config.get("repo_url") or self.config.get("local_dir")
+    def set_config(self, key, value):
+        self.config[key] = value
 
-    def get_output_settings(self):
-        return {
-            "dir": self.config["output_dir"],
-            "format": self.config.get("output_format", "markdown")
-        }
+    def get_config(self, key):
+        return self.config.get(key)
 ```
 
-This `ConfigManager` class helps us organize and access our configuration settings easily.
+This `ConfigManager` class is like a magical box that stores all our settings. We can put settings in with `set_config` and take them out with `get_config`.
+
+## Customizing Your Documentation
+
+You can customize many aspects of your documentation generation. Here are some examples:
+
+```python
+config_manager = ConfigManager()
+
+config_manager.set_config("code_language", "python")
+config_manager.set_config("doc_style", "tutorial")
+config_manager.set_config("include_diagrams", True)
+```
+
+With these settings, we're telling our documentation generator to expect Python code, create a tutorial-style document, and include diagrams. It's like telling a chef exactly how you want your meal prepared!
 
 ## Conclusion
 
-Configuration Management is like a control panel for our documentation generator. It allows us to customize how we create documentation for different projects, making our `github-agent` flexible and powerful!
+Configuration Management is the magic wand that makes our documentation generator flexible and powerful. It allows us to adapt to different projects and needs without changing our core code.
 
-In our next chapter, we'll explore the [Node System](04_node_system_.md), which helps us break down the documentation process into manageable steps. Get ready to build your documentation like a pro!
+In the next chapter, we'll explore the [Node System](04_node_system_.md), which forms the building blocks of our documentation generator. Get ready to see how we put together the pieces of our documentation puzzle!
 
 
 
@@ -362,108 +370,99 @@ In our next chapter, we'll explore the [Node System](04_node_system_.md), which 
 
 # Chapter 4: Node System
 
-Welcome back to our journey through the `github-agent` project! In our [previous chapter](03_configuration_management_.md), we explored how Configuration Management allows us to customize our documentation generation process. Now, let's dive into the heart of our documentation factory: the Node System.
+Welcome back, future documentation masters! In our [previous chapter](03_configuration_management_.md), we learned how to customize our documentation generator. Now, let's dive into the heart of our project: the Node System.
 
-## What Problem Does the Node System Solve?
+Imagine you're building a complex Lego structure. Each Lego piece has a specific role, and when combined, they create something amazing. That's exactly what the Node System does for our documentation generator!
 
-Imagine you're building a complex Lego structure. You don't create the entire thing at once; instead, you assemble small, manageable pieces that eventually come together to form the whole. That's exactly what the Node System does for our documentation generation process!
+## What is the Node System?
 
-Let's say we want to create documentation for a weather app. We need to fetch the code, analyze it, write chapters, and combine everything into a final document. Each of these tasks is like a specialized Lego piece in our documentation building set.
+The Node System is like a team of specialized workers in a documentation factory. Each worker (or node) has a specific job to do, and when they work together, they transform raw code into beautiful, structured documentation.
 
-## Key Concepts of the Node System
+Let's break it down with a simple analogy:
 
-1. **Nodes**: These are our specialized Lego pieces. Each node performs a specific task in the documentation creation process.
-2. **Data Flow**: This is how information moves from one node to another, like connecting Lego pieces.
-3. **Shared Store**: Think of this as a magical Lego baseplate that all our pieces can access and modify.
+1. You have a recipe (your code)
+2. You have different chefs (nodes) who each specialize in a part of the cooking process
+3. When they work together, they create a delicious meal (your documentation)
 
-## Using the Node System
+## How Does the Node System Work?
 
-Let's see how we might use the Node System to create documentation for our weather app:
+Let's look at a simple example of how we might use the Node System:
 
 ```python
-from nodes import FetchRepo, AnalyzeCode, WriteChapters, CombineDocumentation
+from pocketflow import Flow
+from nodes import FetchRepo, IdentifyAbstractions, WriteChapters
 
-# Create our nodes
-fetch_node = FetchRepo()
-analyze_node = AnalyzeCode()
-write_node = WriteChapters()
-combine_node = CombineDocumentation()
+def create_documentation_flow():
+    fetch_repo = FetchRepo()
+    identify_abstractions = IdentifyAbstractions()
+    write_chapters = WriteChapters()
 
-# Connect the nodes
-fetch_node >> analyze_node >> write_node >> combine_node
+    fetch_repo >> identify_abstractions >> write_chapters
 
-# Run the process
-shared_store = {"repo_url": "https://github.com/weather-app/cool-forecasts"}
-result = combine_node.run(shared_store)
+    return Flow(start=fetch_repo)
 ```
 
-In this example, we create four nodes and connect them in a sequence. The `>>` operator shows how data flows from one node to the next. We start the process by running the last node, which automatically runs all the previous nodes in order.
+In this code, we're creating three nodes:
+1. `FetchRepo`: This node fetches your code from a repository
+2. `IdentifyAbstractions`: This node analyzes your code to find important concepts
+3. `WriteChapters`: This node writes the actual documentation chapters
+
+The `>>` operator connects these nodes in sequence, like a conveyor belt in our documentation factory.
 
 ## Under the Hood
 
-Let's take a closer look at what happens when we run our Node System:
+When you run this Node System, here's what happens behind the scenes:
 
 ```mermaid
 sequenceDiagram
-    participant SS as Shared Store
+    participant User
     participant FR as FetchRepo
-    participant AC as AnalyzeCode
+    participant IA as IdentifyAbstractions
     participant WC as WriteChapters
-    participant CD as CombineDocumentation
 
-    SS->>FR: Provide repo URL
-    FR->>SS: Store fetched code
-    SS->>AC: Provide code
-    AC->>SS: Store analysis results
-    SS->>WC: Provide analysis
-    WC->>SS: Store written chapters
-    SS->>CD: Provide chapters
-    CD->>SS: Store final document
+    User->>FR: Start process
+    FR->>IA: Pass fetched code
+    IA->>WC: Pass identified concepts
+    WC->>User: Return final documentation
 ```
 
-1. The Shared Store starts with the repository URL.
-2. FetchRepo node fetches the code and stores it in the Shared Store.
-3. AnalyzeCode node analyzes the code and stores the results.
-4. WriteChapters node uses the analysis to write chapters.
-5. CombineDocumentation node combines all chapters into the final document.
+1. The user starts the process
+2. `FetchRepo` fetches the code and passes it to `IdentifyAbstractions`
+3. `IdentifyAbstractions` analyzes the code and passes the important concepts to `WriteChapters`
+4. `WriteChapters` creates the final documentation and returns it to the user
 
-## Implementing a Simple Node
+## Customizing the Node System
 
-Let's create a simple node that greets the user:
+The beauty of the Node System is that you can customize it to fit your needs. Let's say you want to add a step to upload your documentation to GitHub:
 
 ```python
-from pocketflow import Node
+from nodes import UploadToGitHub
 
-class GreetingNode(Node):
-    def prep(self, shared):
-        return shared.get("name", "User")
+def create_custom_flow():
+    # ... (previous nodes)
+    upload_to_github = UploadToGitHub()
 
-    def exec(self, name):
-        return f"Hello, {name}!"
+    # ... (connect previous nodes)
+    write_chapters >> upload_to_github
 
-    def post(self, shared, prep_res, exec_res):
-        shared["greeting"] = exec_res
+    return Flow(start=fetch_repo)
 ```
 
-This node has three methods:
-- `prep`: Prepares data from the shared store.
-- `exec`: Performs the main task (creating a greeting).
-- `post`: Stores the result back in the shared store.
+This customized flow adds a new node at the end to upload your documentation to GitHub.
 
-To use this node:
+## Why Use the Node System?
 
-```python
-greeting_node = GreetingNode()
-shared = {"name": "Alice"}
-greeting_node.run(shared)
-print(shared["greeting"])  # Output: Hello, Alice!
-```
+The Node System offers several advantages:
+
+1. **Flexibility**: You can easily add, remove, or rearrange nodes to change how your documentation is generated.
+2. **Reusability**: Each node can be used in different flows, like Lego pieces in different structures.
+3. **Simplicity**: Each node focuses on one task, making the system easier to understand and maintain.
 
 ## Conclusion
 
-The Node System is like a set of specialized Lego pieces that work together to build our documentation. It breaks down the complex task of documentation generation into smaller, manageable steps, making the process more flexible and easier to understand.
+The Node System is the engine that powers our documentation generator. It breaks down the complex task of documentation generation into smaller, manageable pieces that work together seamlessly.
 
-In our [next chapter](05_llm_integration_.md), we'll explore how we integrate Large Language Models (LLMs) into our documentation process, adding even more intelligence to our documentation factory. Get ready to dive into the world of AI-powered documentation generation!
+In our next chapter, we'll explore [LLM Integration](05_llm_integration_.md), where we'll see how we use advanced language models to make our documentation even smarter. Get ready to add some AI magic to our documentation factory!
 
 
 
@@ -472,111 +471,100 @@ In our [next chapter](05_llm_integration_.md), we'll explore how we integrate La
 
 # Chapter 5: LLM Integration
 
-Welcome back, documentation explorers! In our [previous chapter](04_node_system_.md), we learned about the Node System, which helps us break down our documentation process into manageable steps. Now, let's dive into the exciting world of LLM Integration!
+Welcome back, documentation wizards! In our [previous chapter](04_node_system_.md), we explored the Node System, the building blocks of our documentation generator. Now, let's dive into the exciting world of LLM Integration – our AI-powered writing assistant!
 
-Imagine you have a super-smart friend who's an expert at explaining complex topics. That's exactly what LLM Integration brings to our `github-agent` project! LLM stands for Large Language Model, and it's like having an AI assistant that can understand code and explain it in simple terms.
+## What is LLM Integration?
 
-## What Problem Does LLM Integration Solve?
+Imagine you have a super-smart friend who's amazing at explaining complex topics in simple terms. Now, imagine that friend is always available to help you write documentation. That's essentially what LLM Integration does for our project!
 
-Let's say you're documenting a weather app, and you come across a particularly tricky piece of code that calculates wind chill. Instead of scratching your head trying to figure out how to explain it, you can ask our AI friend to help!
+LLM stands for Large Language Model. It's like a digital brain that understands and generates human-like text. In our `github-agent` project, we use LLM Integration to take complex code and turn it into easy-to-understand documentation.
 
-## Key Concepts
+## How Does LLM Integration Work?
 
-1. **LLM**: A powerful AI that can understand and generate human-like text.
-2. **Prompt**: The question or instruction we give to the LLM.
-3. **Response**: The explanation or content the LLM generates for us.
+Let's say you want to document a function that calculates the area of a circle. Here's how LLM Integration might help:
+
+1. You show the code to the LLM:
+
+```python
+def calculate_circle_area(radius):
+    return 3.14159 * radius * radius
+```
+
+2. You ask the LLM to explain it in simple terms.
+
+3. The LLM might respond with:
+
+"This function calculates the area of a circle. It takes the radius as input and multiplies it by itself and by pi (approximately 3.14159) to get the area."
 
 ## Using LLM Integration
 
-To use LLM Integration, we start by importing the necessary function:
+Here's a simple example of how we might use LLM Integration in our project:
 
 ```python
 from utils.call_llm import call_llm
-```
 
-Now, let's ask our AI friend to explain a piece of code:
+code_snippet = "def greet(name):\n    return f'Hello, {name}!'"
+prompt = f"Explain this code in simple terms:\n{code_snippet}"
 
-```python
-code_snippet = """
-def calculate_wind_chill(temp, wind_speed):
-    return 13.12 + 0.6215*temp - 11.37*wind_speed**0.16 + 0.3965*temp*wind_speed**0.16
-"""
-
-prompt = f"Explain this code in simple terms: {code_snippet}"
 explanation = call_llm(prompt)
 print(explanation)
 ```
 
-This will send our code snippet to the LLM and print out a beginner-friendly explanation!
+This code sends a prompt to our LLM, asking it to explain a simple Python function. The LLM then returns an explanation, which we can use in our documentation.
 
 ## Under the Hood
 
-When we use LLM Integration, here's what happens behind the scenes:
+When you use LLM Integration, here's what happens behind the scenes:
 
 ```mermaid
 sequenceDiagram
-    participant U as User
-    participant LI as LLM Integration
-    participant C as Cache
-    participant A as AI Model
-    participant L as Logger
+    participant User
+    participant App as Our Application
+    participant LLM as Language Model
+    participant Doc as Documentation
 
-    U->>LI: Send prompt
-    LI->>C: Check cache
-    alt Cache hit
-        C->>LI: Return cached response
-    else Cache miss
-        LI->>A: Send prompt to AI
-        A->>LI: Return AI response
-        LI->>C: Update cache
-    end
-    LI->>L: Log interaction
-    LI->>U: Return response
+    User->>App: Request documentation
+    App->>LLM: Send code snippet
+    LLM->>App: Return explanation
+    App->>Doc: Include explanation
+    Doc->>User: Deliver documentation
 ```
 
-1. We send a prompt to the LLM Integration.
-2. It checks if we've asked this question before (using a cache).
-3. If it's a new question, it asks the AI model.
-4. The response is saved for future use and logged.
-5. Finally, we get back our explanation!
+1. You request documentation for some code.
+2. Our application sends the code to the LLM.
+3. The LLM analyzes the code and generates an explanation.
+4. Our application includes this explanation in the documentation.
+5. You receive the completed documentation with easy-to-understand explanations.
 
-## Implementation Details
+## The Code Behind the Magic
 
-The LLM Integration is implemented in the `utils/call_llm.py` file. Let's look at a simplified version:
+Let's take a closer look at how we interact with the LLM:
 
 ```python
-import os
-from anthropic import Anthropic
-
 def call_llm(prompt: str, use_cache: bool = True) -> str:
-    # Check cache (simplified)
-    if use_cache and prompt in cache:
-        return cache[prompt]
-
-    # Call Claude 3.5 Sonnet
-    client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-    response = client.messages.create(
-        model="claude-3-5-sonnet-20240620",
-        max_tokens=4096,
-        messages=[
-            {"role": "user", "content": prompt}
-        ]
-    )
-    response_text = response.content[0].text
-
-    # Update cache and return
-    if use_cache:
-        cache[prompt] = response_text
-    return response_text
+    # Check cache for existing response
+    # If not in cache, call the LLM API
+    # Log the prompt and response
+    # Update cache with new response
+    # Return the response
 ```
 
-This function sends our prompt to an AI model called Claude, gets the response, and handles caching to save time and resources.
+This function handles sending prompts to the LLM and receiving responses. It also includes caching to save time and resources by remembering previous responses.
+
+## Why Use LLM Integration?
+
+LLM Integration offers several benefits:
+
+1. **Simplification**: It can explain complex code in simple terms.
+2. **Consistency**: It maintains a consistent style across your documentation.
+3. **Efficiency**: It can generate explanations much faster than a human in many cases.
+4. **Adaptability**: It can adjust its explanations based on the context you provide.
 
 ## Conclusion
 
-LLM Integration is like having a brilliant friend who can explain any code or concept in simple terms. It helps us create clearer, more beginner-friendly documentation by leveraging the power of AI!
+LLM Integration is like having a tireless, super-smart writing assistant that helps turn complex code into clear, beginner-friendly documentation. It's a powerful tool that enhances our [Documentation Flow](01_documentation_flow_.md) and makes our project more accessible to users of all levels.
 
-In our [next chapter](06_code_crawler_.md), we'll explore the Code Crawler, which helps us navigate through the files and folders of our project. Get ready to become a code explorer!
+In our next chapter, we'll explore the [Code Crawler](06_code_crawler_.md), which helps us navigate through your project's codebase. Get ready to see how we discover all the nooks and crannies of your code!
 
 
 
@@ -585,89 +573,112 @@ In our [next chapter](06_code_crawler_.md), we'll explore the Code Crawler, whic
 
 # Chapter 6: Code Crawler
 
-Welcome back, code explorers! In our [previous chapter](05_llm_integration_.md), we discovered how to use AI to help explain complex code. Now, let's embark on a new adventure with the Code Crawler!
+Welcome back, coding explorers! In our [previous chapter](05_llm_integration_.md), we discovered how AI can help us explain complex code. Now, let's embark on a new adventure with the Code Crawler!
 
-Imagine you're a detective investigating a huge mansion (your codebase). You need to find all the clues (important code files) hidden in different rooms (folders). That's exactly what the Code Crawler does for our `github-agent` project!
+Imagine you're a detective investigating a massive library. Your job is to find all the important books and read their contents. That's exactly what the Code Crawler does, but with code instead of books!
 
-## What Problem Does the Code Crawler Solve?
+## What is the Code Crawler?
 
-Let's say you're documenting a weather app, but the code is spread across many files and folders. Instead of manually searching for each file, the Code Crawler acts like your trusty sidekick, automatically finding all the relevant code snippets for you.
+The Code Crawler is like a friendly robot that explores your code files, whether they're stored on GitHub or your local computer. It's designed to:
 
-## Key Concepts
+1. Find all the relevant code files
+2. Read their contents
+3. Organize everything neatly for our documentation generator
 
-1. **Repository**: The mansion (codebase) we're investigating.
-2. **File Patterns**: Clues about what kind of files we're looking for (e.g., "*.py" for Python files).
-3. **Exclusion Rules**: Areas of the mansion we don't need to search (like the attic or basement).
+Let's say you have a big project with lots of Python files. You want to create documentation, but you don't want to include test files or files that are too large. The Code Crawler can help!
 
-## Using the Code Crawler
+## How to Use the Code Crawler
 
-To use the Code Crawler, we start by importing the necessary function:
+Here's a simple example of how we might use the Code Crawler:
 
 ```python
 from utils.crawl_github_files import crawl_github_files
-```
 
-Now, let's search for Python files in our weather app repository:
-
-```python
-repo_url = "https://github.com/weather-app/cool-forecasts"
+repo_url = "https://github.com/your-username/your-project"
 result = crawl_github_files(
     repo_url,
     include_patterns={"*.py"},
-    exclude_patterns={"tests/*"}
+    exclude_patterns={"tests/*"},
+    max_file_size=1_000_000  # 1 MB
 )
 ```
 
-This tells our Code Crawler to look for all Python files, but ignore anything in the "tests" folder.
+This code tells our Code Crawler to:
+1. Look at your GitHub project
+2. Include all Python files (*.py)
+3. Exclude anything in the "tests" folder
+4. Skip any file larger than 1 MB
+
+After running this, `result` will contain all the Python files from your project, except for tests and large files.
 
 ## Under the Hood
 
-When we use the Code Crawler, here's what happens behind the scenes:
+When you use the Code Crawler, here's what happens behind the scenes:
 
 ```mermaid
 sequenceDiagram
-    participant U as User
+    participant User
     participant CC as Code Crawler
-    participant GH as GitHub API
-    participant F as File System
+    participant GH as GitHub
+    participant FS as File System
 
-    U->>CC: Start crawling
-    CC->>GH: Request repository contents
-    GH->>CC: Return file list
+    User->>CC: Start crawling
+    CC->>GH: Fetch repository contents
+    GH-->>CC: Return file list
     loop For each file
-        CC->>GH: Request file content
-        GH->>CC: Return file content
-        CC->>F: Save file locally
+        CC->>GH: Fetch file content
+        GH-->>CC: Return content
+        CC->>CC: Apply filters
+        CC->>FS: Save filtered content
     end
-    CC->>U: Return crawled files
+    CC->>User: Return organized files
 ```
 
-1. We tell the Code Crawler which repository to investigate.
-2. It asks GitHub for a list of all files in the repository.
-3. For each file that matches our patterns, it downloads the content.
-4. Finally, it gives us a neat collection of all the relevant files.
+1. You tell the Code Crawler to start
+2. It asks GitHub for a list of all files in your project
+3. For each file, it:
+   - Fetches the content
+   - Checks if the file matches your include/exclude patterns
+   - Saves the file if it passes all checks
+4. Finally, it gives you a neat package of all the relevant files
 
-## Implementation Details
+## The Code Behind the Magic
 
-The Code Crawler is implemented in the `utils/crawl_github_files.py` file. Let's look at a simplified version:
+Let's peek at how our Code Crawler works:
 
 ```python
-def crawl_github_files(repo_url, include_patterns, exclude_patterns):
-    files = {}
-    for file in get_repo_files(repo_url):
-        if should_include_file(file, include_patterns, exclude_patterns):
-            content = download_file_content(file)
-            files[file.path] = content
-    return files
+def crawl_github_files(repo_url, include_patterns, exclude_patterns, max_file_size):
+    # Fetch repository contents
+    files = fetch_repo_contents(repo_url)
+    
+    filtered_files = {}
+    for file_path, content in files.items():
+        if should_include_file(file_path, include_patterns, exclude_patterns):
+            if len(content) <= max_file_size:
+                filtered_files[file_path] = content
+    
+    return filtered_files
 ```
 
-This function gets all files from the repository, checks each one against our include and exclude patterns, and downloads the content of matching files.
+This simplified version shows how the Code Crawler:
+1. Fetches all files from the repository
+2. Checks each file against the include and exclude patterns
+3. Ensures the file isn't too large
+4. Keeps only the files that pass all checks
+
+## Why Use the Code Crawler?
+
+The Code Crawler offers several benefits:
+
+1. **Efficiency**: It quickly gathers all relevant code files
+2. **Flexibility**: You can easily customize what files to include or exclude
+3. **Organization**: It provides a clean, structured set of files for further processing
 
 ## Conclusion
 
-The Code Crawler is like a super-efficient detective that quickly gathers all the important code files for our documentation. It saves us time and ensures we don't miss any crucial pieces of our codebase.
+The Code Crawler is your friendly neighborhood detective, exploring your codebase and bringing back all the important files for documentation. It works hand in hand with our [Documentation Flow](01_documentation_flow_.md) to ensure we have all the right ingredients for creating amazing documentation.
 
-In our [next chapter](07_jira_integration_.md), we'll explore how to integrate our documentation process with Jira, a popular project management tool. Get ready to connect your code documentation with your team's workflow!
+In our next chapter, we'll explore [Jira Integration](07_jira_integration_.md), where we'll see how we can connect our documentation to project management tools. Get ready to bridge the gap between code and project planning!
 
 
 
@@ -676,92 +687,96 @@ In our [next chapter](07_jira_integration_.md), we'll explore how to integrate o
 
 # Chapter 7: Jira Integration
 
-Welcome back, documentation heroes! In our [previous chapter](06_code_crawler_.md), we explored how the Code Crawler helps us navigate through our project's files. Now, let's dive into an exciting new feature that connects our documentation process with the world of project management: Jira Integration!
+Welcome back, documentation champions! In our [previous chapter](06_code_crawler_.md), we explored how the Code Crawler helps us navigate through your project's codebase. Now, let's dive into the exciting world of Jira Integration – our bridge between code and project management!
 
-Imagine you're writing a cookbook for your weather app, but you also want to know what recipes (features) your team is currently working on. That's where Jira Integration comes in handy! It's like having a magical cookbook that automatically updates with new recipes your team is creating.
+Imagine you're writing a story about a magical castle, but you also need to keep track of which parts of the castle you've described and what still needs work. That's where Jira Integration comes in handy for our documentation project!
 
-## What Problem Does Jira Integration Solve?
+## What is Jira Integration?
 
-Let's say you're documenting your weather app, and you want to include information about upcoming features or recent changes. Instead of constantly asking your team for updates, Jira Integration acts like a friendly messenger, bringing you the latest news from your project management tool right into your documentation!
+Jira is like a digital whiteboard where teams keep track of their tasks and progress. Our Jira Integration is a friendly messenger that talks to Jira and brings back important information about your project. This helps us make our documentation even more useful by connecting it to your team's ongoing work.
 
-## Key Concepts
+Let's say you're working on a feature to add a dragon to your castle. In Jira, you might have a task that looks like this:
 
-1. **Jira**: A popular project management tool used by many development teams.
-2. **Issues**: These are like recipe cards in Jira, representing tasks, features, or bugs.
-3. **Project Key**: A unique identifier for your project in Jira (e.g., "WEATHER" for your weather app).
+```
+Task: Add fire-breathing dragon to the castle
+Description: Create a friendly dragon named Sparky who guards the treasure room
+Status: In Progress
+Assigned to: Dragon Tamer Emma
+```
 
-## Using Jira Integration
+Our Jira Integration can fetch this information and use it to enrich our documentation!
 
-To use Jira Integration, we first need to set up our connection:
+## How to Use Jira Integration
+
+Here's a simple example of how we might use Jira Integration in our project:
 
 ```python
 from utils.jira_client import get_shared_issues
 
-# This function will automatically use your Jira credentials
 issues = get_shared_issues()
-```
-
-This code fetches all the relevant issues from your Jira project. It's like asking your magical cookbook to show you all the recipes currently being worked on!
-
-Now, let's see what we got:
-
-```python
 for issue in issues:
     print(f"Issue: {issue['issue']}")
-    print(f"Description: {issue['description']}\n")
+    print(f"Description: {issue['description']}")
+    print("---")
 ```
 
-This will print out a list of all the issues (recipes) and their descriptions. It's a great way to see what your team is working on at a glance!
+This code fetches all the relevant issues from your Jira project and prints out their keys and descriptions. It's like asking our messenger to bring us a list of all the castle-building tasks!
 
 ## Under the Hood
 
-When we use Jira Integration, here's what happens behind the scenes:
+When you use Jira Integration, here's what happens behind the scenes:
 
 ```mermaid
 sequenceDiagram
-    participant DG as Documentation Generator
-    participant JC as Jira Client
-    participant JS as Jira Server
-    participant DF as Documentation Flow
+    participant User
+    participant App as Our Application
+    participant JI as Jira Integration
+    participant Jira as Jira Server
+    participant Doc as Documentation
 
-    DG->>JC: Request issues
-    JC->>JS: Authenticate and fetch issues
-    JS->>JC: Return issue data
-    JC->>DG: Provide simplified issue list
-    DG->>DF: Incorporate issue info into docs
+    User->>App: Request documentation
+    App->>JI: Fetch Jira issues
+    JI->>Jira: Request project issues
+    Jira->>JI: Return issue data
+    JI->>App: Provide issue information
+    App->>Doc: Include Jira data
+    Doc->>User: Deliver enriched documentation
 ```
 
-1. Our Documentation Generator asks the Jira Client for issues.
-2. The Jira Client connects to the Jira Server and fetches the data.
-3. The issue data is simplified and returned to our Documentation Generator.
-4. Finally, this information is incorporated into our documentation.
+1. You request documentation for your project.
+2. Our application asks the Jira Integration to fetch relevant issues.
+3. The Jira Integration talks to your Jira server and gets the issue data.
+4. Our application includes this Jira information in your documentation.
+5. You receive documentation that's connected to your project's tasks!
 
-## Implementation Details
+## The Code Behind the Magic
 
-The Jira Integration is implemented in the `utils/jira_client.py` file. Let's look at a simplified version of how we fetch issues:
+Let's take a closer look at how we interact with Jira:
 
 ```python
-def get_shared_issues():
-    # Set up Jira client (details omitted for simplicity)
-    client = get_jira_client(server_url, email, api_token)
-    
-    # Fetch issues
-    issues = get_jira_issues(client, project_key)
-    
-    # Simplify and return issue data
-    return [
-        {"issue": issue["key"], "description": issue.get("description", "")}
-        for issue in issues
-    ]
+def get_jira_client(server_url, email, api_token):
+    return JIRA(server=server_url, basic_auth=(email, api_token))
+
+def get_jira_issues(jira_client, project_key):
+    issues = jira_client.search_issues(f"project = {project_key}")
+    return [{"key": issue.key, "summary": issue.fields.summary} for issue in issues]
 ```
 
-This function connects to Jira, fetches the issues, and simplifies them into a format that's easy for our documentation generator to use.
+This simplified code shows how we connect to Jira and fetch issues. It's like giving our messenger the address of the Jira whiteboard and asking them to bring back a list of all the tasks.
+
+## Why Use Jira Integration?
+
+Jira Integration offers several benefits:
+
+1. **Context**: It helps connect your code to your project tasks.
+2. **Up-to-date Information**: Your documentation can reflect the current state of your project.
+3. **Collaboration**: It bridges the gap between developers and project managers.
 
 ## Conclusion
 
-Jira Integration is like having a direct line to your project's pulse. It allows you to automatically include up-to-date information about your project's progress right in your documentation. This keeps your docs fresh and relevant, just like a constantly updated cookbook!
+Jira Integration is like having a helpful messenger that keeps your documentation in sync with your project management. It works seamlessly with our [Documentation Flow](01_documentation_flow_.md) to create documentation that's not just about code, but also about your team's goals and progress.
 
-In our [next chapter](08_documentation_combiner_.md), we'll explore the Documentation Combiner, which helps us put all our generated content together into a beautiful, cohesive document. Get ready to see your documentation come to life!
+In our next chapter, we'll explore the [Documentation Combiner](08_documentation_combiner_.md), where we'll see how all these pieces come together to create your final, polished documentation. Get ready to see your documentation take its final form!
 
 
 
@@ -770,78 +785,75 @@ In our [next chapter](08_documentation_combiner_.md), we'll explore the Document
 
 # Chapter 8: Documentation Combiner
 
-Welcome back, documentation wizards! In our [previous chapter](07_jira_integration_.md), we explored how to connect our documentation process with Jira for up-to-date project information. Now, let's put on our editor hats and dive into the exciting world of the Documentation Combiner!
+Welcome back, documentation champions! In our [previous chapter](07_jira_integration_.md), we explored how to connect our documentation with project management tools. Now, let's put on our librarian hats and dive into the exciting world of the Documentation Combiner!
 
-Imagine you've written several chapters for your weather app tutorial, but they're all scattered in different files. The Documentation Combiner is like a magical book binder that takes all these separate chapters and turns them into one beautiful, cohesive book. It's the final step in creating your masterpiece!
+Imagine you've written lots of little stories about different parts of a magical kingdom. Now you want to put them all together into one big, beautiful storybook. That's exactly what the Documentation Combiner does for our project!
 
-## What Problem Does the Documentation Combiner Solve?
+## What is the Documentation Combiner?
 
-Let's say you've used the [Code Crawler](06_code_crawler_.md) to gather information about your weather app, the [LLM Integration](05_llm_integration_.md) to explain complex parts, and even included some Jira updates. Now you have multiple markdown files, each covering a different aspect of your app. But how do you turn these into a single, easy-to-read tutorial? That's where the Documentation Combiner comes to the rescue!
+The Documentation Combiner is like a friendly librarian who takes all the separate chapters we've created and binds them into a complete, well-organized book. It's the final step in our documentation journey, turning all our hard work into something that's easy for others to read and understand.
 
-## Key Concepts
+Let's say we've been documenting a project about building a treehouse. We might have separate files for:
 
-1. **Combining**: The process of merging multiple files into one.
-2. **Ordering**: Arranging the chapters in a logical sequence.
-3. **Formatting**: Ensuring the final document looks good and is consistent.
+1. Choosing the right tree
+2. Designing the treehouse
+3. Building the foundation
+4. Adding walls and a roof
+5. Decorating the interior
 
-## Using the Documentation Combiner
+The Documentation Combiner takes all these separate pieces and puts them together in the right order, adds a table of contents, and makes sure everything looks nice and consistent.
 
-To use the Documentation Combiner, we start by importing the necessary function:
+## How to Use the Documentation Combiner
+
+Here's a simple example of how we might use the Documentation Combiner:
 
 ```python
 from utils.node_utility import combine_documentation
+
+output_dir = "treehouse_project"
+combined_doc = combine_documentation(output_dir, output_format="pdf")
+print(f"Combined documentation created at: {combined_doc}")
 ```
 
-Now, let's combine our weather app tutorial chapters:
-
-```python
-output_dir = "./weather_app_docs"
-combined_file = combine_documentation(output_dir, "pdf")
-print(f"Combined tutorial: {combined_file}")
-```
-
-This code tells our Documentation Combiner to look in the "weather_app_docs" folder, find all the markdown files, and combine them into a single PDF file.
+This code tells our Documentation Combiner to:
+1. Look in the "treehouse_project" folder for all our documentation files
+2. Combine them into a single PDF document
+3. Tell us where it saved the final document
 
 ## Under the Hood
 
-When we use the Documentation Combiner, here's what happens behind the scenes:
+When you use the Documentation Combiner, here's what happens behind the scenes:
 
 ```mermaid
 sequenceDiagram
-    participant U as User
+    participant User
     participant DC as Doc Combiner
     participant FS as File System
-    participant M as Markdown Processor
-    participant P as PDF Generator
+    participant PDF as PDF Generator
 
-    U->>DC: Start combining
-    DC->>FS: Get all markdown files
-    FS->>DC: Return file list
-    DC->>DC: Order files
-    loop For each file
-        DC->>FS: Read file content
-        FS->>DC: Return content
-        DC->>M: Process markdown
-        M->>DC: Return processed content
-    end
-    DC->>P: Generate PDF
-    P->>DC: Return PDF file
-    DC->>U: Return combined document
+    User->>DC: Start combining
+    DC->>FS: Fetch all markdown files
+    FS-->>DC: Return file contents
+    DC->>DC: Order and merge content
+    DC->>PDF: Generate PDF
+    PDF-->>DC: Return PDF file
+    DC->>User: Deliver combined document
 ```
 
-1. We tell the Documentation Combiner which folder to look in.
-2. It finds all the markdown files in that folder.
-3. The files are ordered (usually based on their names).
-4. Each file is read and processed.
-5. Finally, everything is combined into a single PDF document.
+1. You tell the Documentation Combiner to start
+2. It looks for all the markdown files in your project folder
+3. It reads the content of each file
+4. It puts the content together in the right order
+5. It creates a PDF (or markdown) file with all the combined content
+6. Finally, it gives you the completed document
 
-## Implementation Details
+## The Code Behind the Magic
 
-The Documentation Combiner is implemented in the `utils/node_utility.py` file. Let's look at a simplified version of how it works:
+Let's peek at how our Documentation Combiner works:
 
 ```python
 def combine_documentation(output_dir, output_format="pdf"):
-    md_files = sorted(glob.glob(os.path.join(output_dir, "*.md")))
+    md_files = sorted(glob.glob(os.path.join(output_dir, "**/*.md")))
     combined_content = []
     
     for md_file in md_files:
@@ -849,23 +861,34 @@ def combine_documentation(output_dir, output_format="pdf"):
             content = f.read()
             combined_content.append(content)
     
-    final_content = "\n\n".join(combined_content)
+    final_content = "\n\n---\n\n".join(combined_content)
     
     if output_format == "pdf":
-        # Convert to PDF (simplified)
         return create_pdf(final_content)
     else:
-        # Save as markdown
         return save_markdown(final_content)
 ```
 
-This function finds all markdown files, reads their content, combines them, and then either creates a PDF or saves a single markdown file, depending on what we asked for.
+This simplified version shows how the Documentation Combiner:
+1. Finds all markdown files in your project
+2. Reads the content of each file
+3. Joins all the content together, adding separators between chapters
+4. Creates either a PDF or a markdown file with the combined content
+
+## Why Use the Documentation Combiner?
+
+The Documentation Combiner offers several benefits:
+
+1. **Organization**: It puts all your documentation in one place
+2. **Consistency**: It ensures a uniform look across all chapters
+3. **Convenience**: Readers can access all information in a single document
+4. **Flexibility**: You can choose between PDF and markdown formats
 
 ## Conclusion
 
-The Documentation Combiner is like the final piece of a puzzle, bringing together all the hard work you've done in creating your tutorial. It takes the individual chapters you've crafted and turns them into a polished, professional document that's ready to share with the world.
+The Documentation Combiner is the final piece of our documentation puzzle. It takes all the hard work we've done throughout our [Documentation Flow](01_documentation_flow_.md) and presents it in a polished, professional format. It's like the ribbon on top of a beautifully wrapped gift – making our documentation not just informative, but also a joy to read!
 
-And with that, we've completed our journey through the `github-agent` project! You now have all the tools you need to create amazing, AI-assisted documentation for your projects. Remember, the key to great documentation is clear explanations, helpful examples, and a touch of creativity. Happy documenting!
+Thank you for joining us on this documentation adventure. We hope you're now equipped to create amazing, user-friendly documentation for all your projects. Happy documenting!
 
 
 
