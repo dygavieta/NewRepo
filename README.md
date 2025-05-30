@@ -1,4 +1,4 @@
-# pdf-extractor Tutorial
+# <built-in method upper of str object at 0x000001D1E8E739B0> DOCUMENTATION
 
 
 # Documentation: pdf-extractor
