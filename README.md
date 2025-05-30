@@ -1,543 +1,469 @@
 # github-agent Tutorial
 
 
-# Tutorial: github-agent
+# Documentation: github-agent
 
-The **github-agent** project is an automated tool for generating **comprehensive tutorials** from GitHub repositories or local directories. It uses **AI-powered analysis** to identify key abstractions in codebases, explain their relationships, and create detailed, beginner-friendly documentation. The system employs a **modular architecture** with a *Node System* for processing, *LLM Integration* for content generation, and supports multiple output formats and upload options. This tool aims to make complex codebases more accessible and understandable for developers of all skill levels.
+The **github-agent** project is an automated documentation generator that creates comprehensive tutorials from GitHub repositories or local codebases. It uses **Large Language Models** (LLMs) to analyze code, identify key abstractions, and generate beginner-friendly explanations. The system follows a structured *flow* of operations, from fetching source code to producing a final, well-organized tutorial document. It can integrate with *Jira* for project context and supports uploading the generated documentation to *Google Drive* or *GitHub*.
 
 
 **Source Repository:** [https://github.com/dygavieta/github-agent](https://github.com/dygavieta/github-agent)
 
 ```mermaid
 flowchart TD
-    A0["Tutorial Flow
+    A0["Documentation Flow
 "]
     A1["Node System
 "]
     A2["LLM Integration
 "]
-    A3["File Crawler
+    A3["Code Crawler
 "]
-    A4["Tutorial Combiner
+    A4["Documentation Combiner
 "]
-    A5["Command Line Interface
+    A5["Jira Integration
 "]
-    A6["Docker Environment
+    A6["Server Interface
 "]
-    A0 -- "Orchestrates using" --> A1
-    A1 -- "Utilizes for content genera..." --> A2
-    A1 -- "Invokes for file retrieval" --> A3
-    A1 -- "Uses for final output" --> A4
-    A5 -- "Initiates and configures" --> A0
-    A6 -- "Encapsulates and runs" --> A5
-    A3 -- "Operates within" --> A6
-    A4 -- "May use for formatting" --> A2
-    A2 -- "Configured and executed in" --> A6
-    A0 -- "Finalizes output using" --> A4
+    A7["Configuration Management
+"]
+    A0 -- "Orchestrates" --> A1
+    A1 -- "Utilizes for analysis" --> A2
+    A1 -- "Fetches code through" --> A3
+    A1 -- "Assembles output using" --> A4
+    A1 -- "Enriches content via" --> A5
+    A6 -- "Initiates" --> A0
+    A7 -- "Configures" --> A0
+    A4 -- "Provides output to" --> A6
 ```
 
 ## Chapters
 
-1. [Command Line Interface
-](01_command_line_interface_.md)
-2. [Tutorial Flow
-](02_tutorial_flow_.md)
-3. [Node System
-](03_node_system_.md)
-4. [File Crawler
-](04_file_crawler_.md)
+1. [Documentation Flow
+](01_documentation_flow_.md)
+2. [Server Interface
+](02_server_interface_.md)
+3. [Configuration Management
+](03_configuration_management_.md)
+4. [Node System
+](04_node_system_.md)
 5. [LLM Integration
 ](05_llm_integration_.md)
-6. [Tutorial Combiner
-](06_tutorial_combiner_.md)
-7. [Docker Environment
-](07_docker_environment_.md)
+6. [Code Crawler
+](06_code_crawler_.md)
+7. [Jira Integration
+](07_jira_integration_.md)
+8. [Documentation Combiner
+](08_documentation_combiner_.md)
 
 
 ---
 
 
 
-## 01_command_line_interface_
+## 01_documentation_flow_
 
 
-# Chapter 1: Command Line Interface
+# Chapter 1: Documentation Flow
 
-Welcome to the first chapter of our tutorial on the `github-agent` project! We're going to start by exploring the Command Line Interface (CLI), which is your main way of interacting with this powerful tool.
+Welcome to the exciting world of `github-agent`! In this chapter, we'll explore the heart of our project: the Documentation Flow. Think of it as the master chef in a bustling kitchen, orchestrating the creation of a delicious documentation feast.
 
-Imagine you're about to embark on a road trip. Before you start driving, you need to input your destination, choose your route, and set up your preferences. The CLI for `github-agent` works in a similar way - it's like the dashboard of your car, allowing you to set up everything before your tutorial generation journey begins.
+## What Problem Does Documentation Flow Solve?
 
-Let's say you want to generate a tutorial for a GitHub project called "awesome-app". Here's how you might use the CLI:
+Imagine you're tasked with explaining a complex codebase to a newcomer. Where do you start? How do you organize the information? This is where Documentation Flow comes to the rescue! It automates the process of turning a jumble of code files into a clear, well-structured tutorial.
 
-```bash
-python main.py --repo https://github.com/username/awesome-app --language english
-```
-
-This simple command tells `github-agent` to create a tutorial for the "awesome-app" repository in English. But there's so much more you can do! Let's break down the key concepts of our CLI.
+Let's say we have a simple weather app project. Our Documentation Flow will help us create a tutorial that explains how the app works, from fetching weather data to displaying it on the screen.
 
 ## Key Concepts
 
-1. **Source Selection**: You can choose between a GitHub repository or a local directory as your source.
-2. **Output Customization**: Decide where and how your tutorial should be saved.
-3. **File Filtering**: Select which files to include or exclude in your tutorial.
-4. **Language Selection**: Choose the language for your generated tutorial.
-5. **Caching**: Enable or disable caching of language model responses.
+1. **Flow**: A sequence of steps that work together to achieve a goal.
+2. **Nodes**: Individual tasks in our flow, like "analyze code" or "write chapter".
+3. **Connections**: The order in which nodes are executed.
 
-Let's look at these in more detail.
+## Using Documentation Flow
 
-### Source Selection
+To use the Documentation Flow, we start by creating it:
 
-You have two options for your tutorial source:
+```python
+from flow import create_documentation_flow
 
-```bash
-python main.py --repo https://github.com/username/awesome-app
-```
-or
-```bash
-python main.py --dir /path/to/local/project
+documentation_flow = create_documentation_flow()
 ```
 
-The `--repo` option is for GitHub repositories, while `--dir` is for local directories. Choose the one that fits your needs!
+This sets up our flow with all the necessary steps. Now, let's run it:
 
-### Output Customization
-
-By default, your tutorial will be saved in an `output` directory. But you can change this:
-
-```bash
-python main.py --repo https://github.com/username/awesome-app --output my_tutorials
+```python
+shared = {
+    "repo_url": "https://github.com/weather-app/cool-forecasts",
+    "output_dir": "./tutorial_output"
+}
+documentation_flow.run(shared)
 ```
 
-This will save your tutorial in a directory called `my_tutorials`.
-
-### File Filtering
-
-You can specify which files to include or exclude:
-
-```bash
-python main.py --repo https://github.com/username/awesome-app --include "*.py" "*.js" --exclude "tests/*"
-```
-
-This will include Python and JavaScript files, but exclude anything in the `tests` directory.
-
-### Language Selection
-
-Choose the language for your tutorial:
-
-```bash
-python main.py --repo https://github.com/username/awesome-app --language spanish
-```
-
-This will generate the tutorial in Spanish.
-
-### Caching
-
-By default, caching is enabled to speed up tutorial generation. You can disable it if needed:
-
-```bash
-python main.py --repo https://github.com/username/awesome-app --no-cache
-```
+This will start the documentation process for our weather app. The `shared` dictionary contains important information that our flow will use and update as it progresses.
 
 ## Under the Hood
 
-When you run a command, here's what happens behind the scenes:
+When we run our Documentation Flow, here's what happens behind the scenes:
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant CLI as Command Line Interface
-    participant AF as Argument Parser
-    participant TF as Tutorial Flow
-
-    User->>CLI: Enter command
-    CLI->>AF: Parse arguments
-    AF->>TF: Pass parsed arguments
-    TF->>User: Generate tutorial
-```
-
-1. You enter a command.
-2. The CLI processes your input.
-3. The argument parser interprets your options.
-4. These options are passed to the tutorial flow, which generates your tutorial.
-
-Let's look at a simplified version of how this works in code:
-
-```python
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--repo", help="GitHub repository URL")
-    # ... other arguments ...
-    args = parser.parse_args()
-
-    shared = {
-        "repo_url": args.repo,
-        # ... other options ...
-    }
-
-    tutorial_flow = create_tutorial_flow()
-    tutorial_flow.run(shared)
-```
-
-This code sets up the argument parser, creates a dictionary of shared options, and then runs the tutorial flow with these options.
-
-## Conclusion
-
-The Command Line Interface is your control center for `github-agent`. It allows you to customize your tutorial generation process, making it flexible and powerful. 
-
-In the next chapter, we'll dive into the [Tutorial Flow](02_tutorial_flow_.md) to see how your CLI inputs are transformed into a comprehensive tutorial. Get ready to explore the magic behind the scenes!
-
-
-
-## 02_tutorial_flow_
-
-
-# Chapter 2: Tutorial Flow
-
-Welcome back! In our [previous chapter](01_command_line_interface_.md), we learned how to interact with `github-agent` using the Command Line Interface. Now, let's dive into the heart of our tutorial generation process: the Tutorial Flow.
-
-Imagine you're following a cooking recipe. You start by gathering ingredients, then prepare them, mix them together, and finally cook your dish. The Tutorial Flow works in a similar way, but instead of creating a meal, it's creating a tutorial for your codebase!
-
-Let's say you want to create a tutorial for your awesome new app. Here's how the Tutorial Flow helps you do that:
-
-1. It fetches your code (like gathering ingredients)
-2. It identifies the important parts of your code (like preparing ingredients)
-3. It figures out how these parts work together (like understanding how ingredients mix)
-4. It decides the best order to explain things (like planning the cooking steps)
-5. It writes the tutorial chapters (like cooking the dish)
-6. It combines everything into a complete tutorial (like plating the meal)
-
-Let's break this down and see how it works!
-
-## Key Concepts
-
-### 1. Fetching the Repository
-
-This is like going to the grocery store. The Tutorial Flow starts by getting all your code from GitHub or your local directory.
-
-```python
-fetch_repo = FetchRepo()
-```
-
-This simple line sets up the "fetching" step. It's like saying "I'm ready to go shopping!"
-
-### 2. Identifying Abstractions
-
-Next, the flow looks at your code and figures out the important parts. It's like sorting through your groceries and deciding what's essential for your recipe.
-
-```python
-identify_abstractions = IdentifyAbstractions(max_retries=5, wait=20)
-```
-
-This step might take a few tries (that's what `max_retries=5` means), just like you might need to double-check your ingredients.
-
-### 3. Analyzing Relationships
-
-Now, the flow figures out how different parts of your code work together. It's like understanding how flavors combine in cooking.
-
-```python
-analyze_relationships = AnalyzeRelationships(max_retries=5, wait=20)
-```
-
-### 4. Ordering Chapters
-
-The flow decides the best order to explain your code. It's like planning the steps of your recipe.
-
-```python
-order_chapters = OrderChapters(max_retries=5, wait=20)
-```
-
-### 5. Writing Chapters
-
-This is where the magic happens! The flow writes each chapter of your tutorial, explaining your code bit by bit.
-
-```python
-write_chapters = WriteChapters(max_retries=5, wait=20)
-```
-
-### 6. Combining the Tutorial
-
-Finally, all the chapters are put together into one complete tutorial. It's like serving your finished dish!
-
-```python
-combine_tutorial = CombineTutorial()
-combine_files = CombineTutorialFiles()
-```
-
-## How It All Works Together
-
-Let's see how these steps flow together:
-
-```mermaid
-sequenceDiagram
+    participant MF as Main Flow
     participant FR as Fetch Repo
     participant IA as Identify Abstractions
-    participant AR as Analyze Relationships
-    participant OC as Order Chapters
     participant WC as Write Chapters
-    participant CT as Combine Tutorial
+    participant CD as Combine Documentation
 
-    FR->>IA: Code files
-    IA->>AR: Important parts
-    AR->>OC: Relationships
-    OC->>WC: Chapter order
-    WC->>CT: Written chapters
-    CT->>User: Complete tutorial
+    MF->>FR: Fetch code
+    FR->>IA: Analyze code
+    IA->>WC: Generate chapters
+    WC->>CD: Combine into tutorial
+    CD->>MF: Return final document
 ```
 
-This diagram shows how information flows from one step to the next, eventually resulting in your complete tutorial!
+Let's break this down:
 
-## Under the Hood
+1. We fetch the code from the repository.
+2. The code is analyzed to identify key concepts and structures.
+3. Individual chapters are written based on these concepts.
+4. Finally, all chapters are combined into a cohesive tutorial.
 
-Let's peek at how this flow is set up in the code:
+## Implementation Details
+
+The Documentation Flow is created in the `flow.py` file. Here's a simplified version of how it's set up:
 
 ```python
-def create_tutorial_flow():
+def create_documentation_flow():
     fetch_repo = FetchRepo()
-    identify_abstractions = IdentifyAbstractions(max_retries=5, wait=20)
-    analyze_relationships = AnalyzeRelationships(max_retries=5, wait=20)
-    order_chapters = OrderChapters(max_retries=5, wait=20)
-    write_chapters = WriteChapters(max_retries=5, wait=20)
-    combine_tutorial = CombineTutorial()
-    
-    # Connect the steps
-    fetch_repo >> identify_abstractions >> analyze_relationships >> order_chapters >> write_chapters >> combine_tutorial
-    
+    identify_abstractions = IdentifyAbstractions()
+    write_chapters = WriteChapters()
+    combine_documentation = CombineDocumentation()
+
+    fetch_repo >> identify_abstractions >> write_chapters >> combine_documentation
+
     return Flow(start=fetch_repo)
 ```
 
-This code sets up each step and connects them in order, like laying out the steps of a recipe.
-
-The `>>` symbol is used to connect steps, showing which step comes next. It's like drawing arrows between steps in your recipe.
+Each line creates a node, and the `>>` operator connects them in sequence. This tells our flow the order in which to execute these tasks.
 
 ## Conclusion
 
-The Tutorial Flow is the engine that drives `github-agent`. It takes your code, understands it, and transforms it into a clear, step-by-step tutorial. By breaking down the process into manageable steps, it ensures that your tutorial is comprehensive and well-structured.
+The Documentation Flow is the backbone of `github-agent`, turning code into clear, readable tutorials. It breaks down the complex task of documentation into manageable steps, ensuring nothing is missed.
 
-In our next chapter, we'll dive into the [Node System](03_node_system_.md), which powers each step of our Tutorial Flow. Get ready to explore the building blocks that make this magic possible!
-
-
-
-## 03_node_system_
-
-
-# Chapter 3: Node System
-
-Welcome back to our journey through the `github-agent` project! In the [previous chapter](02_tutorial_flow_.md), we explored the Tutorial Flow, which guides the overall process of creating tutorials. Now, let's dive into the engine that powers this flow: the Node System.
-
-## What is the Node System?
-
-Imagine you're building a toy car on an assembly line. Each station on the line has a specific job: one attaches the wheels, another paints the body, and so on. The Node System in `github-agent` works similarly, but instead of building a toy car, we're crafting a tutorial!
-
-The Node System is like our assembly line, where each "station" (called a node) performs a specific task on our tutorial "product". Let's see how this works in practice.
-
-## Key Concepts
-
-### 1. Nodes
-
-A node is like a worker on our assembly line. Each node has a specific job to do. For example, we might have nodes for:
-
-- Fetching code from GitHub
-- Analyzing the code structure
-- Writing individual chapters
-
-### 2. Input and Output
-
-Each node takes some input (like raw code), processes it, and produces an output (like a chapter summary). This output can then become the input for the next node.
-
-### 3. Flow
-
-The nodes are connected in a specific order, creating a flow of information. This is like how our toy car moves from one station to the next on the assembly line.
-
-## How to Use the Node System
-
-Let's look at a simple example of how we might set up a basic node system:
-
-```python
-fetch_node = FetchRepo()
-analyze_node = AnalyzeCode()
-write_node = WriteChapter()
-
-fetch_node >> analyze_node >> write_node
-```
-
-In this example:
-1. `FetchRepo` fetches the code
-2. `AnalyzeCode` examines the fetched code
-3. `WriteChapter` uses the analysis to write a chapter
-
-The `>>` symbol connects the nodes, showing the order of operations.
-
-## Under the Hood
-
-Let's peek at how a node might work internally:
-
-```python
-class AnalyzeCode(Node):
-    def exec(self, code):
-        # Analyze the code
-        important_parts = find_important_parts(code)
-        return important_parts
-
-    def post(self, shared, prep_res, exec_res):
-        shared['analysis'] = exec_res
-```
-
-Here's what's happening:
-1. The `exec` method does the main work (analyzing code).
-2. The `post` method saves the result for other nodes to use.
-
-## The Node System in Action
-
-Let's visualize how data flows through our node system:
-
-```mermaid
-sequenceDiagram
-    participant FR as FetchRepo
-    participant AC as AnalyzeCode
-    participant WC as WriteChapter
-
-    FR->>AC: Raw Code
-    AC->>WC: Code Analysis
-    WC->>User: Chapter Content
-```
-
-1. `FetchRepo` gets the code and passes it to `AnalyzeCode`.
-2. `AnalyzeCode` examines the code and sends its findings to `WriteChapter`.
-3. `WriteChapter` uses this analysis to create the final chapter content.
-
-## Why Use the Node System?
-
-The Node System offers several benefits:
-
-1. **Modularity**: We can easily add, remove, or rearrange nodes.
-2. **Flexibility**: Each node can be customized or replaced without affecting others.
-3. **Clarity**: The flow of data is clear and easy to understand.
-4. **Reusability**: Nodes can be reused in different flows or projects.
-
-## Conclusion
-
-The Node System is the backbone of `github-agent`, allowing us to break down the complex task of tutorial generation into manageable, modular steps. By understanding this system, you're now equipped to grasp how `github-agent` transforms code into comprehensive tutorials.
-
-In our [next chapter](04_file_crawler_.md), we'll explore the File Crawler, which helps us navigate through the codebase. Get ready to discover how `github-agent` finds its way through the maze of project files!
+In the next chapter, we'll dive into the [Server Interface](02_server_interface_.md), which helps our Documentation Flow communicate with the outside world. Get ready to explore how we send and receive information to make our documentation process even smoother!
 
 
 
-## 04_file_crawler_
+## 02_server_interface_
 
 
-# Chapter 4: File Crawler
+# Chapter 2: Server Interface
 
-Welcome back to our journey through the `github-agent` project! In our [previous chapter](03_node_system_.md), we explored the Node System, which forms the backbone of our tutorial generation process. Now, let's dive into an exciting component that helps us navigate through the vast sea of code: the File Crawler.
+Welcome back, aspiring documentation wizards! In our [previous chapter](01_documentation_flow_.md), we explored how the Documentation Flow works its magic to transform code into beautiful tutorials. Now, let's dive into the Server Interface, which acts as the friendly receptionist for our documentation factory.
 
-Imagine you're a detective investigating a huge library. Your mission is to find specific books that contain important clues. That's exactly what our File Crawler does, but instead of a physical library, it searches through digital repositories or local directories to find the right files for our tutorial.
+## What's the Server Interface All About?
 
-Let's say we want to create a tutorial for a Python project. Here's how the File Crawler helps us:
+Imagine you're running a bustling restaurant. You need someone at the front desk to take orders, answer phone calls, and ensure everything runs smoothly. That's exactly what the Server Interface does for our `github-agent` project!
 
-1. It goes through all the files in the project.
-2. It picks out only the Python files (ignoring things like images or configuration files).
-3. It skips over files that are too big or not relevant to our tutorial.
-4. It collects the content of the files we need.
+Let's say you want to create documentation for your awesome new weather app, but you're working on a different computer or even collaborating with a team. How do you access the documentation generator? Enter the Server Interface!
 
 ## Key Concepts
 
-### 1. Repository Navigation
+1. **Server**: A computer program that provides services to other programs or devices.
+2. **Interface**: A point where two systems meet and interact.
+3. **Network**: A group of connected computers that can communicate with each other.
 
-The File Crawler can work with both GitHub repositories and local directories. It's like having a map of our code library.
+## Using the Server Interface
+
+To use the Server Interface, we first need to start it up. It's like opening our restaurant for business:
 
 ```python
-repo_url = "https://github.com/username/awesome-project"
-local_dir = "/path/to/my/project"
+from server import mcp
+
+if __name__ == "__main__":
+    mcp.run()
 ```
 
-### 2. File Filtering
+This code snippet starts our server, making it ready to accept requests.
 
-We can tell the File Crawler which files to include or exclude. It's like giving our detective specific instructions on which books to look for.
-
-```python
-include_patterns = {"*.py", "*.md"}
-exclude_patterns = {"tests/*", "*.pyc"}
-```
-
-### 3. Size Limits
-
-We can set a maximum file size to avoid processing huge files that might slow us down.
+Now, let's say we want to generate documentation for our weather app. We can send a request to our server like this:
 
 ```python
-max_file_size = 1 * 1024 * 1024  # 1 MB
-```
-
-## Using the File Crawler
-
-Let's see how we might use the File Crawler to get Python files from a GitHub repository:
-
-```python
-from utils.crawl_github_files import crawl_github_files
-
-result = crawl_github_files(
-    repo_url,
-    include_patterns={"*.py"},
-    max_file_size=1 * 1024 * 1024
+result = generate_document(
+    repo_url="https://github.com/weather-app/cool-forecasts",
+    upload="github"
 )
 ```
 
-This code will:
-1. Go to the specified GitHub repository
-2. Look for all Python files (`.py`)
-3. Skip any files larger than 1 MB
-4. Return a dictionary with the file contents
+This tells our server to generate documentation for the specified GitHub repository and upload the result to GitHub.
 
 ## Under the Hood
 
-Let's peek at how the File Crawler works its magic:
+When we use the Server Interface, here's what happens behind the scenes:
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant FC as File Crawler
-    participant GH as GitHub API
-    participant FS as File System
+    participant C as Client
+    participant SI as Server Interface
+    participant DF as Documentation Flow
+    participant GH as GitHub
 
-    User->>FC: Start crawling
-    FC->>GH: Request repository contents
-    GH->>FC: Return file list
-    loop For each file
-        FC->>FC: Check file type and size
-        alt File matches criteria
-            FC->>GH: Request file content
-            GH->>FC: Return file content
-            FC->>FS: Save file content
-        else File doesn't match
-            FC->>FC: Skip file
-        end
-    end
-    FC->>User: Return collected files
+    C->>SI: Send request
+    SI->>DF: Generate documentation
+    DF->>SI: Return result
+    SI->>GH: Upload documentation
+    SI->>C: Send response
 ```
 
-1. The user starts the crawling process.
-2. The File Crawler asks GitHub for a list of files.
-3. For each file, it checks if it matches our criteria (type, size, etc.).
-4. If a file matches, it fetches and saves the content.
-5. If a file doesn't match, it skips it.
-6. Finally, it returns all the collected files to the user.
+1. A client (like your computer) sends a request to the Server Interface.
+2. The Server Interface calls the [Documentation Flow](01_documentation_flow_.md) to generate the documentation.
+3. Once the documentation is ready, it's uploaded to GitHub (or another specified location).
+4. Finally, the Server Interface sends a response back to the client with the results.
 
-Let's look at a simplified version of the code that does this:
+## Implementation Details
+
+The Server Interface is implemented in the `server.py` file. Let's look at a simplified version:
 
 ```python
-def crawl_github_files(repo_url, include_patterns, max_file_size):
-    files = {}
-    for file in get_repo_files(repo_url):
-        if file_matches_pattern(file, include_patterns) and file_size_ok(file, max_file_size):
-            content = fetch_file_content(file)
-            files[file.path] = content
-    return files
+from fastmcp import FastMCP
+from flow import create_documentation_flow
+
+mcp = FastMCP("Document Generator")
+
+@mcp.tool()
+def generate_document(repo_url: str, upload: str) -> dict:
+    # Set up shared data
+    shared = {
+        "repo_url": repo_url,
+        "upload": upload,
+        # ... other settings ...
+    }
+    
+    # Create and run the documentation flow
+    tutorial_flow = create_documentation_flow()
+    tutorial_flow.run(shared)
+    
+    # Return the results
+    return {
+        "status": "success",
+        "output_dir": shared["final_output_dir"],
+        # ... other results ...
+    }
 ```
 
-This function goes through each file in the repository, checks if it matches our criteria, and if so, fetches its content and adds it to our `files` dictionary.
+This code defines a `generate_document` function that our server can call when it receives a request. It sets up the necessary data, runs the documentation flow, and returns the results.
 
 ## Conclusion
 
-The File Crawler is our trusty detective, sifting through the vast world of code to find exactly what we need for our tutorial. By understanding how it works, we can efficiently gather the right files to create comprehensive and focused tutorials.
+The Server Interface is like a friendly robot assistant that helps you generate documentation from anywhere, anytime. It takes your requests, works with the Documentation Flow to create beautiful tutorials, and sends the results back to you or uploads them directly.
 
-In our [next chapter](05_llm_integration_.md), we'll explore how we integrate Language Models to transform these collected files into coherent tutorial content. Get ready to see how we turn code into clear, beginner-friendly explanations!
+In our next chapter, we'll explore [Configuration Management](03_configuration_management_.md), which helps us customize how our documentation is generated. Get ready to fine-tune your documentation factory!
+
+
+
+## 03_configuration_management_
+
+
+# Chapter 3: Configuration Management
+
+Welcome back, documentation adventurers! In our [previous chapter](02_server_interface_.md), we explored how the Server Interface acts as a friendly receptionist for our documentation factory. Now, let's dive into the exciting world of Configuration Management!
+
+Imagine you're setting up a new smartphone. You get to choose your wallpaper, ringtone, and app layout. That's exactly what Configuration Management does for our `github-agent` project!
+
+## What Problem Does Configuration Management Solve?
+
+Let's say you're creating documentation for different projects: a weather app, a recipe book, and a fitness tracker. Each project might need different settings. For example, the weather app might need to include JavaScript files, while the recipe book focuses on Markdown files. Configuration Management helps us customize these settings easily!
+
+## Key Concepts
+
+1. **Configuration**: A set of settings that control how our documentation is generated.
+2. **Input Sources**: Where we get our code from (like GitHub repositories or local folders).
+3. **Output Formats**: How we want our final documentation to look (e.g., Markdown files, PDF, or HTML).
+4. **Processing Options**: Special instructions for handling our code (like ignoring certain files or focusing on specific parts).
+
+## Using Configuration Management
+
+To use Configuration Management, we start by setting up our configuration:
+
+```python
+config = {
+    "repo_url": "https://github.com/weather-app/cool-forecasts",
+    "output_dir": "./docs",
+    "include_patterns": ["*.js", "*.md"],
+    "exclude_patterns": ["tests/*"],
+    "language": "english"
+}
+```
+
+This configuration tells our system to document a weather app from GitHub, save the output in a "docs" folder, include JavaScript and Markdown files, exclude test files, and generate the documentation in English.
+
+Now, let's use this configuration:
+
+```python
+from documentation_generator import generate_docs
+
+generate_docs(config)
+```
+
+This will start the documentation process using our custom settings!
+
+## Under the Hood
+
+When we use Configuration Management, here's what happens behind the scenes:
+
+```mermaid
+sequenceDiagram
+    participant CM as Config Manager
+    participant FR as Fetch Repo
+    participant DF as Doc Flow
+    participant OG as Output Generator
+
+    CM->>FR: Provide input source
+    FR->>DF: Send filtered files
+    DF->>OG: Apply processing options
+    OG->>CM: Return final document
+```
+
+1. The Configuration Manager reads our settings.
+2. It tells the [Code Crawler](06_code_crawler_.md) where to find our code.
+3. The [Documentation Flow](01_documentation_flow_.md) uses our processing options.
+4. Finally, the output is generated according to our chosen format.
+
+## Implementation Details
+
+The Configuration Management is implemented in the `config.py` file. Here's a simplified version:
+
+```python
+class ConfigManager:
+    def __init__(self, config):
+        self.config = config
+
+    def get_input_source(self):
+        return self.config.get("repo_url") or self.config.get("local_dir")
+
+    def get_output_settings(self):
+        return {
+            "dir": self.config["output_dir"],
+            "format": self.config.get("output_format", "markdown")
+        }
+```
+
+This `ConfigManager` class helps us organize and access our configuration settings easily.
+
+## Conclusion
+
+Configuration Management is like a control panel for our documentation generator. It allows us to customize how we create documentation for different projects, making our `github-agent` flexible and powerful!
+
+In our next chapter, we'll explore the [Node System](04_node_system_.md), which helps us break down the documentation process into manageable steps. Get ready to build your documentation like a pro!
+
+
+
+## 04_node_system_
+
+
+# Chapter 4: Node System
+
+Welcome back to our journey through the `github-agent` project! In our [previous chapter](03_configuration_management_.md), we explored how Configuration Management allows us to customize our documentation generation process. Now, let's dive into the heart of our documentation factory: the Node System.
+
+## What Problem Does the Node System Solve?
+
+Imagine you're building a complex Lego structure. You don't create the entire thing at once; instead, you assemble small, manageable pieces that eventually come together to form the whole. That's exactly what the Node System does for our documentation generation process!
+
+Let's say we want to create documentation for a weather app. We need to fetch the code, analyze it, write chapters, and combine everything into a final document. Each of these tasks is like a specialized Lego piece in our documentation building set.
+
+## Key Concepts of the Node System
+
+1. **Nodes**: These are our specialized Lego pieces. Each node performs a specific task in the documentation creation process.
+2. **Data Flow**: This is how information moves from one node to another, like connecting Lego pieces.
+3. **Shared Store**: Think of this as a magical Lego baseplate that all our pieces can access and modify.
+
+## Using the Node System
+
+Let's see how we might use the Node System to create documentation for our weather app:
+
+```python
+from nodes import FetchRepo, AnalyzeCode, WriteChapters, CombineDocumentation
+
+# Create our nodes
+fetch_node = FetchRepo()
+analyze_node = AnalyzeCode()
+write_node = WriteChapters()
+combine_node = CombineDocumentation()
+
+# Connect the nodes
+fetch_node >> analyze_node >> write_node >> combine_node
+
+# Run the process
+shared_store = {"repo_url": "https://github.com/weather-app/cool-forecasts"}
+result = combine_node.run(shared_store)
+```
+
+In this example, we create four nodes and connect them in a sequence. The `>>` operator shows how data flows from one node to the next. We start the process by running the last node, which automatically runs all the previous nodes in order.
+
+## Under the Hood
+
+Let's take a closer look at what happens when we run our Node System:
+
+```mermaid
+sequenceDiagram
+    participant SS as Shared Store
+    participant FR as FetchRepo
+    participant AC as AnalyzeCode
+    participant WC as WriteChapters
+    participant CD as CombineDocumentation
+
+    SS->>FR: Provide repo URL
+    FR->>SS: Store fetched code
+    SS->>AC: Provide code
+    AC->>SS: Store analysis results
+    SS->>WC: Provide analysis
+    WC->>SS: Store written chapters
+    SS->>CD: Provide chapters
+    CD->>SS: Store final document
+```
+
+1. The Shared Store starts with the repository URL.
+2. FetchRepo node fetches the code and stores it in the Shared Store.
+3. AnalyzeCode node analyzes the code and stores the results.
+4. WriteChapters node uses the analysis to write chapters.
+5. CombineDocumentation node combines all chapters into the final document.
+
+## Implementing a Simple Node
+
+Let's create a simple node that greets the user:
+
+```python
+from pocketflow import Node
+
+class GreetingNode(Node):
+    def prep(self, shared):
+        return shared.get("name", "User")
+
+    def exec(self, name):
+        return f"Hello, {name}!"
+
+    def post(self, shared, prep_res, exec_res):
+        shared["greeting"] = exec_res
+```
+
+This node has three methods:
+- `prep`: Prepares data from the shared store.
+- `exec`: Performs the main task (creating a greeting).
+- `post`: Stores the result back in the shared store.
+
+To use this node:
+
+```python
+greeting_node = GreetingNode()
+shared = {"name": "Alice"}
+greeting_node.run(shared)
+print(shared["greeting"])  # Output: Hello, Alice!
+```
+
+## Conclusion
+
+The Node System is like a set of specialized Lego pieces that work together to build our documentation. It breaks down the complex task of documentation generation into smaller, manageable steps, making the process more flexible and easier to understand.
+
+In our [next chapter](05_llm_integration_.md), we'll explore how we integrate Large Language Models (LLMs) into our documentation process, adding even more intelligence to our documentation factory. Get ready to dive into the world of AI-powered documentation generation!
 
 
 
@@ -546,322 +472,400 @@ In our [next chapter](05_llm_integration_.md), we'll explore how we integrate La
 
 # Chapter 5: LLM Integration
 
-Welcome back to our journey through the `github-agent` project! In our [previous chapter](04_file_crawler_.md), we explored how the File Crawler helps us navigate through codebases. Now, let's dive into the exciting world of LLM Integration - the AI brain of our project!
+Welcome back, documentation explorers! In our [previous chapter](04_node_system_.md), we learned about the Node System, which helps us break down our documentation process into manageable steps. Now, let's dive into the exciting world of LLM Integration!
 
-Imagine you have a super-smart friend who can read code and explain it in simple terms. That's exactly what LLM Integration does for `github-agent`! It's like having an AI tutor that turns complex code into easy-to-understand tutorials.
+Imagine you have a super-smart friend who's an expert at explaining complex topics. That's exactly what LLM Integration brings to our `github-agent` project! LLM stands for Large Language Model, and it's like having an AI assistant that can understand code and explain it in simple terms.
 
-Let's say we want to explain a piece of Python code to a beginner. Here's how LLM Integration helps us:
+## What Problem Does LLM Integration Solve?
 
-1. It reads the code we give it.
-2. It understands what the code does.
-3. It creates a beginner-friendly explanation.
-4. It can even answer questions about the code!
+Let's say you're documenting a weather app, and you come across a particularly tricky piece of code that calculates wind chill. Instead of scratching your head trying to figure out how to explain it, you can ask our AI friend to help!
 
 ## Key Concepts
 
-### 1. Language Model Communication
-
-LLM Integration talks to AI models like GPT. It's like having a conversation with a very smart computer!
-
-### 2. Prompt Creation
-
-We create special messages (called prompts) to ask the AI for help. It's like knowing the right questions to ask our smart friend.
-
-### 3. Response Processing
-
-We take the AI's answer and make it fit perfectly into our tutorial. It's like taking notes from our smart friend's explanation.
+1. **LLM**: A powerful AI that can understand and generate human-like text.
+2. **Prompt**: The question or instruction we give to the LLM.
+3. **Response**: The explanation or content the LLM generates for us.
 
 ## Using LLM Integration
 
-Let's see how we might use LLM Integration to explain a simple Python function:
+To use LLM Integration, we start by importing the necessary function:
 
 ```python
-def greet(name):
-    return f"Hello, {name}!"
-
-response = call_llm(f"Explain this code: {greet}")
-print(response)
+from utils.call_llm import call_llm
 ```
 
-This code will:
-1. Send our `greet` function to the AI.
-2. Ask the AI to explain it.
-3. Print the AI's explanation.
+Now, let's ask our AI friend to explain a piece of code:
 
-The output might look something like this:
+```python
+code_snippet = """
+def calculate_wind_chill(temp, wind_speed):
+    return 13.12 + 0.6215*temp - 11.37*wind_speed**0.16 + 0.3965*temp*wind_speed**0.16
+"""
 
+prompt = f"Explain this code in simple terms: {code_snippet}"
+explanation = call_llm(prompt)
+print(explanation)
 ```
-This code defines a function called 'greet' that takes one parameter 'name'.
-It returns a greeting message that includes the provided name.
-For example, if you call greet("Alice"), it will return "Hello, Alice!".
-```
+
+This will send our code snippet to the LLM and print out a beginner-friendly explanation!
 
 ## Under the Hood
 
-Let's peek at how LLM Integration works its magic:
+When we use LLM Integration, here's what happens behind the scenes:
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant LLM as LLM Integration
-    participant AI as AI Model
-    participant Cache as Response Cache
+    participant U as User
+    participant LI as LLM Integration
+    participant C as Cache
+    participant A as AI Model
+    participant L as Logger
 
-    User->>LLM: Ask to explain code
-    LLM->>Cache: Check for cached response
-    alt Response in cache
-        Cache->>LLM: Return cached response
-    else No cached response
-        LLM->>AI: Send prompt
-        AI->>LLM: Generate response
-        LLM->>Cache: Store response
+    U->>LI: Send prompt
+    LI->>C: Check cache
+    alt Cache hit
+        C->>LI: Return cached response
+    else Cache miss
+        LI->>A: Send prompt to AI
+        A->>LI: Return AI response
+        LI->>C: Update cache
     end
-    LLM->>User: Return explanation
+    LI->>L: Log interaction
+    LI->>U: Return response
 ```
 
-1. The user asks LLM Integration to explain some code.
-2. LLM Integration checks if it has explained this before (using a cache).
-3. If it's in the cache, it returns the stored explanation.
-4. If not, it asks the AI model for help.
-5. The AI generates an explanation.
-6. LLM Integration stores this new explanation for future use.
-7. Finally, it returns the explanation to the user.
+1. We send a prompt to the LLM Integration.
+2. It checks if we've asked this question before (using a cache).
+3. If it's a new question, it asks the AI model.
+4. The response is saved for future use and logged.
+5. Finally, we get back our explanation!
 
-Let's look at a simplified version of the code that does this:
+## Implementation Details
+
+The LLM Integration is implemented in the `utils/call_llm.py` file. Let's look at a simplified version:
 
 ```python
+import os
+from anthropic import Anthropic
+
 def call_llm(prompt: str, use_cache: bool = True) -> str:
+    # Check cache (simplified)
     if use_cache and prompt in cache:
         return cache[prompt]
-    
-    response = ai_model.generate(prompt)
-    
+
+    # Call Claude 3.5 Sonnet
+    client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    response = client.messages.create(
+        model="claude-3-5-sonnet-20240620",
+        max_tokens=4096,
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
+    )
+    response_text = response.content[0].text
+
+    # Update cache and return
     if use_cache:
-        cache[prompt] = response
-    
-    return response
+        cache[prompt] = response_text
+    return response_text
 ```
 
-This function checks the cache, calls the AI if needed, and stores the result for future use.
+This function sends our prompt to an AI model called Claude, gets the response, and handles caching to save time and resources.
 
 ## Conclusion
 
-LLM Integration is like having a brilliant coding tutor at our fingertips. It helps `github-agent` transform complex code into clear, beginner-friendly explanations. By understanding how it works, we can create tutorials that make even the trickiest concepts easy to grasp.
+LLM Integration is like having a brilliant friend who can explain any code or concept in simple terms. It helps us create clearer, more beginner-friendly documentation by leveraging the power of AI!
 
-In our [next chapter](06_tutorial_combiner_.md), we'll explore how we combine all these AI-generated explanations into a complete, coherent tutorial. Get ready to see how we put all the pieces together to create amazing learning resources!
-
-
-
-## 06_tutorial_combiner_
+In our [next chapter](06_code_crawler_.md), we'll explore the Code Crawler, which helps us navigate through the files and folders of our project. Get ready to become a code explorer!
 
 
-# Chapter 6: Tutorial Combiner
 
-Welcome back to our journey through the `github-agent` project! In our [previous chapter](05_llm_integration_.md), we explored how we use AI to transform code into clear explanations. Now, let's dive into the final stage of our tutorial creation process: the Tutorial Combiner.
+## 06_code_crawler_
 
-Imagine you've just finished writing several chapters of a book, but they're all in separate files. The Tutorial Combiner is like your book editor, who takes all these separate chapters and puts them together into one complete, polished book. It's the magic that turns our individual tutorial pieces into a cohesive, ready-to-read guide!
 
-Let's say we've generated several markdown files explaining different parts of a Python project. Here's how the Tutorial Combiner helps us:
+# Chapter 6: Code Crawler
 
-1. It gathers all our markdown files.
-2. It puts them in the right order.
-3. It adds a table of contents.
-4. It formats everything consistently.
-5. It creates a final document in your chosen format (like PDF or Markdown).
+Welcome back, code explorers! In our [previous chapter](05_llm_integration_.md), we discovered how to use AI to help explain complex code. Now, let's embark on a new adventure with the Code Crawler!
+
+Imagine you're a detective investigating a huge mansion (your codebase). You need to find all the clues (important code files) hidden in different rooms (folders). That's exactly what the Code Crawler does for our `github-agent` project!
+
+## What Problem Does the Code Crawler Solve?
+
+Let's say you're documenting a weather app, but the code is spread across many files and folders. Instead of manually searching for each file, the Code Crawler acts like your trusty sidekick, automatically finding all the relevant code snippets for you.
 
 ## Key Concepts
 
-### 1. File Collection
+1. **Repository**: The mansion (codebase) we're investigating.
+2. **File Patterns**: Clues about what kind of files we're looking for (e.g., "*.py" for Python files).
+3. **Exclusion Rules**: Areas of the mansion we don't need to search (like the attic or basement).
 
-The Tutorial Combiner first needs to find all our tutorial files. It's like gathering all the pages of our book.
+## Using the Code Crawler
 
-```python
-md_files = glob.glob(os.path.join(output_dir, "**/*.md"), recursive=True)
-```
-
-This line finds all markdown files in our output directory.
-
-### 2. Content Ordering
-
-Next, we need to put our content in the right order. It's like making sure chapter 1 comes before chapter 2!
+To use the Code Crawler, we start by importing the necessary function:
 
 ```python
-for md_file in sorted(md_files):
-    # Process each file in order
+from utils.crawl_github_files import crawl_github_files
 ```
 
-### 3. Formatting
-
-The Tutorial Combiner ensures everything looks consistent. It's like making sure all pages in our book have the same font and style.
+Now, let's search for Python files in our weather app repository:
 
 ```python
-# Add a title
-combined_content.append(f"# {project_name} Tutorial\n\n")
-
-# Add each chapter
-for md_file in md_files:
-    combined_content.append(f"\n## {get_chapter_title(md_file)}\n\n")
-    combined_content.append(get_file_content(md_file))
+repo_url = "https://github.com/weather-app/cool-forecasts"
+result = crawl_github_files(
+    repo_url,
+    include_patterns={"*.py"},
+    exclude_patterns={"tests/*"}
+)
 ```
 
-### 4. Output Generation
-
-Finally, we create our finished tutorial in the desired format. It's like printing our book!
-
-```python
-if output_format == "pdf":
-    create_pdf(combined_content)
-else:
-    create_markdown(combined_content)
-```
-
-## How It Works
-
-Let's visualize how the Tutorial Combiner works:
-
-```mermaid
-sequenceDiagram
-    participant FC as File Collector
-    participant CO as Content Organizer
-    participant FO as Formatter
-    participant OG as Output Generator
-    participant User
-
-    FC->>CO: Collected Files
-    CO->>FO: Ordered Content
-    FO->>OG: Formatted Content
-    OG->>User: Final Tutorial
-```
-
-1. The File Collector gathers all our markdown files.
-2. The Content Organizer puts them in the right order.
-3. The Formatter ensures consistent styling.
-4. The Output Generator creates our final tutorial document.
+This tells our Code Crawler to look for all Python files, but ignore anything in the "tests" folder.
 
 ## Under the Hood
 
-Let's peek at a simplified version of how the Tutorial Combiner works:
+When we use the Code Crawler, here's what happens behind the scenes:
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant CC as Code Crawler
+    participant GH as GitHub API
+    participant F as File System
+
+    U->>CC: Start crawling
+    CC->>GH: Request repository contents
+    GH->>CC: Return file list
+    loop For each file
+        CC->>GH: Request file content
+        GH->>CC: Return file content
+        CC->>F: Save file locally
+    end
+    CC->>U: Return crawled files
+```
+
+1. We tell the Code Crawler which repository to investigate.
+2. It asks GitHub for a list of all files in the repository.
+3. For each file that matches our patterns, it downloads the content.
+4. Finally, it gives us a neat collection of all the relevant files.
+
+## Implementation Details
+
+The Code Crawler is implemented in the `utils/crawl_github_files.py` file. Let's look at a simplified version:
 
 ```python
-def combine_tutorials(output_dir, output_format):
-    # Collect files
-    md_files = get_markdown_files(output_dir)
+def crawl_github_files(repo_url, include_patterns, exclude_patterns):
+    files = {}
+    for file in get_repo_files(repo_url):
+        if should_include_file(file, include_patterns, exclude_patterns):
+            content = download_file_content(file)
+            files[file.path] = content
+    return files
+```
+
+This function gets all files from the repository, checks each one against our include and exclude patterns, and downloads the content of matching files.
+
+## Conclusion
+
+The Code Crawler is like a super-efficient detective that quickly gathers all the important code files for our documentation. It saves us time and ensures we don't miss any crucial pieces of our codebase.
+
+In our [next chapter](07_jira_integration_.md), we'll explore how to integrate our documentation process with Jira, a popular project management tool. Get ready to connect your code documentation with your team's workflow!
+
+
+
+## 07_jira_integration_
+
+
+# Chapter 7: Jira Integration
+
+Welcome back, documentation heroes! In our [previous chapter](06_code_crawler_.md), we explored how the Code Crawler helps us navigate through our project's files. Now, let's dive into an exciting new feature that connects our documentation process with the world of project management: Jira Integration!
+
+Imagine you're writing a cookbook for your weather app, but you also want to know what recipes (features) your team is currently working on. That's where Jira Integration comes in handy! It's like having a magical cookbook that automatically updates with new recipes your team is creating.
+
+## What Problem Does Jira Integration Solve?
+
+Let's say you're documenting your weather app, and you want to include information about upcoming features or recent changes. Instead of constantly asking your team for updates, Jira Integration acts like a friendly messenger, bringing you the latest news from your project management tool right into your documentation!
+
+## Key Concepts
+
+1. **Jira**: A popular project management tool used by many development teams.
+2. **Issues**: These are like recipe cards in Jira, representing tasks, features, or bugs.
+3. **Project Key**: A unique identifier for your project in Jira (e.g., "WEATHER" for your weather app).
+
+## Using Jira Integration
+
+To use Jira Integration, we first need to set up our connection:
+
+```python
+from utils.jira_client import get_shared_issues
+
+# This function will automatically use your Jira credentials
+issues = get_shared_issues()
+```
+
+This code fetches all the relevant issues from your Jira project. It's like asking your magical cookbook to show you all the recipes currently being worked on!
+
+Now, let's see what we got:
+
+```python
+for issue in issues:
+    print(f"Issue: {issue['issue']}")
+    print(f"Description: {issue['description']}\n")
+```
+
+This will print out a list of all the issues (recipes) and their descriptions. It's a great way to see what your team is working on at a glance!
+
+## Under the Hood
+
+When we use Jira Integration, here's what happens behind the scenes:
+
+```mermaid
+sequenceDiagram
+    participant DG as Documentation Generator
+    participant JC as Jira Client
+    participant JS as Jira Server
+    participant DF as Documentation Flow
+
+    DG->>JC: Request issues
+    JC->>JS: Authenticate and fetch issues
+    JS->>JC: Return issue data
+    JC->>DG: Provide simplified issue list
+    DG->>DF: Incorporate issue info into docs
+```
+
+1. Our Documentation Generator asks the Jira Client for issues.
+2. The Jira Client connects to the Jira Server and fetches the data.
+3. The issue data is simplified and returned to our Documentation Generator.
+4. Finally, this information is incorporated into our documentation.
+
+## Implementation Details
+
+The Jira Integration is implemented in the `utils/jira_client.py` file. Let's look at a simplified version of how we fetch issues:
+
+```python
+def get_shared_issues():
+    # Set up Jira client (details omitted for simplicity)
+    client = get_jira_client(server_url, email, api_token)
     
-    # Combine content
+    # Fetch issues
+    issues = get_jira_issues(client, project_key)
+    
+    # Simplify and return issue data
+    return [
+        {"issue": issue["key"], "description": issue.get("description", "")}
+        for issue in issues
+    ]
+```
+
+This function connects to Jira, fetches the issues, and simplifies them into a format that's easy for our documentation generator to use.
+
+## Conclusion
+
+Jira Integration is like having a direct line to your project's pulse. It allows you to automatically include up-to-date information about your project's progress right in your documentation. This keeps your docs fresh and relevant, just like a constantly updated cookbook!
+
+In our [next chapter](08_documentation_combiner_.md), we'll explore the Documentation Combiner, which helps us put all our generated content together into a beautiful, cohesive document. Get ready to see your documentation come to life!
+
+
+
+## 08_documentation_combiner_
+
+
+# Chapter 8: Documentation Combiner
+
+Welcome back, documentation wizards! In our [previous chapter](07_jira_integration_.md), we explored how to connect our documentation process with Jira for up-to-date project information. Now, let's put on our editor hats and dive into the exciting world of the Documentation Combiner!
+
+Imagine you've written several chapters for your weather app tutorial, but they're all scattered in different files. The Documentation Combiner is like a magical book binder that takes all these separate chapters and turns them into one beautiful, cohesive book. It's the final step in creating your masterpiece!
+
+## What Problem Does the Documentation Combiner Solve?
+
+Let's say you've used the [Code Crawler](06_code_crawler_.md) to gather information about your weather app, the [LLM Integration](05_llm_integration_.md) to explain complex parts, and even included some Jira updates. Now you have multiple markdown files, each covering a different aspect of your app. But how do you turn these into a single, easy-to-read tutorial? That's where the Documentation Combiner comes to the rescue!
+
+## Key Concepts
+
+1. **Combining**: The process of merging multiple files into one.
+2. **Ordering**: Arranging the chapters in a logical sequence.
+3. **Formatting**: Ensuring the final document looks good and is consistent.
+
+## Using the Documentation Combiner
+
+To use the Documentation Combiner, we start by importing the necessary function:
+
+```python
+from utils.node_utility import combine_documentation
+```
+
+Now, let's combine our weather app tutorial chapters:
+
+```python
+output_dir = "./weather_app_docs"
+combined_file = combine_documentation(output_dir, "pdf")
+print(f"Combined tutorial: {combined_file}")
+```
+
+This code tells our Documentation Combiner to look in the "weather_app_docs" folder, find all the markdown files, and combine them into a single PDF file.
+
+## Under the Hood
+
+When we use the Documentation Combiner, here's what happens behind the scenes:
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant DC as Doc Combiner
+    participant FS as File System
+    participant M as Markdown Processor
+    participant P as PDF Generator
+
+    U->>DC: Start combining
+    DC->>FS: Get all markdown files
+    FS->>DC: Return file list
+    DC->>DC: Order files
+    loop For each file
+        DC->>FS: Read file content
+        FS->>DC: Return content
+        DC->>M: Process markdown
+        M->>DC: Return processed content
+    end
+    DC->>P: Generate PDF
+    P->>DC: Return PDF file
+    DC->>U: Return combined document
+```
+
+1. We tell the Documentation Combiner which folder to look in.
+2. It finds all the markdown files in that folder.
+3. The files are ordered (usually based on their names).
+4. Each file is read and processed.
+5. Finally, everything is combined into a single PDF document.
+
+## Implementation Details
+
+The Documentation Combiner is implemented in the `utils/node_utility.py` file. Let's look at a simplified version of how it works:
+
+```python
+def combine_documentation(output_dir, output_format="pdf"):
+    md_files = sorted(glob.glob(os.path.join(output_dir, "*.md")))
     combined_content = []
-    for md_file in sorted(md_files):
-        content = read_file(md_file)
-        combined_content.append(content)
     
-    # Generate output
+    for md_file in md_files:
+        with open(md_file, "r") as f:
+            content = f.read()
+            combined_content.append(content)
+    
+    final_content = "\n\n".join(combined_content)
+    
     if output_format == "pdf":
-        return create_pdf(combined_content)
+        # Convert to PDF (simplified)
+        return create_pdf(final_content)
     else:
-        return create_markdown(combined_content)
+        # Save as markdown
+        return save_markdown(final_content)
 ```
 
-This function collects all markdown files, combines their content in order, and then creates either a PDF or a markdown file depending on what we choose.
+This function finds all markdown files, reads their content, combines them, and then either creates a PDF or saves a single markdown file, depending on what we asked for.
 
 ## Conclusion
 
-The Tutorial Combiner is the final piece of the puzzle in our tutorial creation process. It takes all the hard work done by the other components and turns it into a polished, ready-to-use tutorial. By understanding how it works, we can appreciate how `github-agent` transforms code into comprehensive learning resources.
+The Documentation Combiner is like the final piece of a puzzle, bringing together all the hard work you've done in creating your tutorial. It takes the individual chapters you've crafted and turns them into a polished, professional document that's ready to share with the world.
 
-In our [next chapter](07_docker_environment_.md), we'll explore the Docker Environment, which helps ensure our entire tutorial generation process runs smoothly across different systems. Get ready to learn how we package all these amazing components into a portable, easy-to-use container!
-
-
-
-## 07_docker_environment_
-
-
-# Chapter 7: Docker Environment
-
-Welcome back to our journey through the `github-agent` project! In our [previous chapter](06_tutorial_combiner_.md), we explored how the Tutorial Combiner puts all our tutorial pieces together. Now, let's dive into the Docker Environment, which is like a magical suitcase that carries our entire project wherever we go!
-
-Imagine you're going on a trip and you want to bring your entire kitchen with you. Sounds impossible, right? Well, that's exactly what Docker does for our `github-agent` project! It packs up everything our project needs - all the tools, settings, and code - into a neat, portable package called a container.
-
-Let's say you want to run `github-agent` on your friend's computer. Here's how the Docker Environment helps:
-
-1. It includes all the necessary tools (like Python and Git).
-2. It sets up the right environment (like installing required libraries).
-3. It packages our code neatly.
-4. It runs the same way on any computer, avoiding the dreaded "but it works on my machine!" problem.
-
-## Key Concepts
-
-### 1. Docker Image
-
-Think of a Docker image as a recipe for our project. It contains instructions on how to set up everything we need.
-
-### 2. Docker Container
-
-A container is like a mini-computer created from our image. It's where our project actually runs.
-
-### 3. Dockerfile
-
-This is the recipe book that tells Docker how to create our image. Let's take a look at a simplified version:
-
-```dockerfile
-FROM python:3.10-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-ENTRYPOINT ["python", "main.py"]
-```
-
-This Dockerfile does the following:
-1. Starts with a slim Python 3.10 image
-2. Sets up a working directory
-3. Copies and installs our requirements
-4. Copies our project files
-5. Sets up the command to run our project
-
-## Using the Docker Environment
-
-To use our Docker environment, you'd typically follow these steps:
-
-1. Build the Docker image:
-   ```
-   docker build -t github-agent .
-   ```
-
-2. Run the container:
-   ```
-   docker run github-agent --repo https://github.com/user/project
-   ```
-
-This is like packing your suitcase and then opening it at your destination!
-
-## Under the Hood
-
-Let's peek at how Docker works its magic:
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Docker
-    participant Image
-    participant Container
-
-    User->>Docker: Build image
-    Docker->>Image: Create from Dockerfile
-    User->>Docker: Run container
-    Docker->>Image: Create container
-    Image->>Container: Start
-    Container->>User: Run github-agent
-```
-
-1. The user asks Docker to build an image.
-2. Docker creates the image based on our Dockerfile.
-3. The user asks to run a container.
-4. Docker creates a container from the image.
-5. The container starts and runs our `github-agent`.
-
-## Conclusion
-
-The Docker Environment is like a magical suitcase that lets us carry our entire `github-agent` project anywhere we go. It ensures that our tutorial generator runs consistently, regardless of where it's being used. This makes it easier for anyone to use `github-agent`, whether they're on a Windows PC, a Mac, or a Linux server!
-
-By understanding how Docker works, we can appreciate how `github-agent` maintains its portability and consistency across different systems. This wraps up our journey through the core components of `github-agent`. You now have a comprehensive understanding of how this powerful tool transforms code into beginner-friendly tutorials!
+And with that, we've completed our journey through the `github-agent` project! You now have all the tools you need to create amazing, AI-assisted documentation for your projects. Remember, the key to great documentation is clear explanations, helpful examples, and a touch of creativity. Happy documenting!
 
 
 
